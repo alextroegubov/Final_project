@@ -5,27 +5,58 @@
 
 class Card{
 public:
+	static std::vector<std::function<void(void)>> abilities;
+
+	enum CardType{
+		Cannon = 0,
+		Anchor,
+		Hook,
+		Key,
+		Chest,
+		Scroll,
+		CrystalBall,
+		Sabre,
+		Kraken,
+		Mermain
+	};
+
+	Card(CardType t, int points, sf::Sprite sprite, std::function<void(void)> ability);
+
 	void ApplyAbility(){ ability_();}
 	void Draw();
+
 	bool IsClicked(const sf::Vector2i& xy);
 	bool IsClicked(int x, int y); 
+
 	void SetPosition(int x, int y){ pos_ = {x, y};}
 	void SetPosition(const sf::Vector2i& xy){ pos_ = xy;}
 
-protected:
+	void Flip(){ front_side_up_ = !front_side_up_;}
+
+//protected:
+	bool front_side_up_; //front or back side up
+	enum CardType type_;
 	bool is_active_;
 	int points_;
 	sf::Sprite sprite_;
 	sf::Vector2i pos_;
 	std::function<void(void)> ability_;
+
 };
 
-class CardHolder{
-public:
-	bool LoadCard(const std::string& filename);
+void CannonAbility();
+void AnchorAbility();
+void HookAbility();
+void KeyAbility();
+void ChestAbility();
+void ScrollAbility();
+void CrystalBallAbility();
+void SabreAbility();
+void MermainAbility();
+void KrakenAbility();
 
-private:
-	std::vector<Card> cards_;
+struct CardHolder{
+	std::vector<Card> cards;
 };
 
 /*
