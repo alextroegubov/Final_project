@@ -7,15 +7,18 @@
 
 class TextureManager{
 public:
+	enum Id{
+		Table = 20
+	};
 
 	void LoadAll();
 
 //	sf::Texture& get(Card::CardType id);
 
-	const sf::Texture& Get(Card::CardType id) const;
+	const sf::Texture& Get(int id) const;
 
 private:
-	void Load(Card::CardType id, const std::string& filename);
+	void Load(int id, const std::string& filename);
 
-	std::map<Card::CardType, std::unique_ptr<sf::Texture>> textures_;
+	std::map<int, std::unique_ptr<sf::Texture>> textures_;
 };
