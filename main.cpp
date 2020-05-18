@@ -11,11 +11,10 @@ int main(){
 	game.ShuffleDeck();
 
 	int i = 0;
-	while(i < 30){
-		std::this_thread::sleep_for(std::chrono::seconds(1));
-		p1.DrawCard(game.GetCardFromDeck());
+	while((i++) < 8){
+		std::this_thread::sleep_for(std::chrono::seconds(2));
+		game.DrawCard();
 		game.Draw();
-		i++;
 	}
 
 	std::this_thread::sleep_for(std::chrono::seconds(3));

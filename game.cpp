@@ -7,6 +7,12 @@ Gameboard::Gameboard(){//:
 	Init();
 }
 
+void Gameboard::CreateWindow(){
+
+	window_ = new sf::RenderWindow(sf::VideoMode(width, height), "Dead Man's Draw", sf::Style::Default);
+	assert(window_);
+}
+
 void Gameboard::CreateCards(){
 
 	std::vector<Card::CardType> types = {Card::Cannon, Card::Anchor, Card::Hook, Card::Key, Card::Chest, 
@@ -37,13 +43,11 @@ void Gameboard::CreateCards(){
 
 void Gameboard::Init(){
 
-	window_ = new sf::RenderWindow(sf::VideoMode(width, height), "Dead Man's Draw", sf::Style::Default);
-	assert(window_);
-
 	t_manager_.LoadAll();
 
 	CreateCards();
-	
+	CreateWindow();
+
 	for(auto& card: card_holder_){
 
 		card.size_ = {740, 1030};
@@ -75,10 +79,17 @@ void Gameboard::Finish(){
 }
 
 
-Card* Gameboard::GetCardFromDeck(){
+Card* Gameboard::DrawCard(){
+	//add animation//
+
 	Card* card = deck_.back();
 	assert(card);
 	deck_.pop_back();
+	//20 - between cards, 25 - margin
+	card->sprite_.setPosition(30 + (/*card->size_.x*/100 + 25) * game_area_.size() , height / 2 - /*card->size_.y*/ 150 / 2);
+
+	game_area_.push_back(card);
+	ProcessCard(card);
 
 	return card;
 }
@@ -87,11 +98,33 @@ Card* Gameboard::GetCardFromDeck(){
 std::random_device rd;
 std::mt19937 g(rd());
 
+//shuffles cards in deck
 void Gameboard::ShuffleDeck(){
 	std::shuffle(deck_.begin(), deck_.end(), g);
 }
 
+//shuffles cards in discard pill
+void Gameboard::ShuffleDiscard(){
+	std::shuffle(discard_.begin(), discard_.end(), g);
+}
 
+void Gameboard::ProcessCard(Card* card){
+	return;
+}
+
+
+//
+void Gameboard::DiscardGameArea(){
+	for(auto& card: game_area_){
+		assert(card);
+		discard_.push_back(card);
+		card->sprite_.setPosition(discard_pos);
+	}
+
+	game_area_.clear();
+}
+
+//
 void Gameboard::Draw(){
 	assert(window_);
 
