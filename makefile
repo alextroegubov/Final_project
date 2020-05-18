@@ -11,7 +11,7 @@ PROG_LIB = game.h player.h cards.h texture_manager.hpp
 all: $(PROG) clean
 
 $(PROG): $(PROG_OBJ) $(PROG_LIB)
-	$(CXX) -o $@ $(PROG_OBJ) $(CXXFLAGS)
+	$(CXX) -fsanitize=address -o $@ $(PROG_OBJ) $(CXXFLAGS)
 
 #add: $(PROG_LIB) $(PROG_OBJ)
 #	git add $(PROG_LIB) $(PROG_CPP)

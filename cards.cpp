@@ -24,7 +24,7 @@ void CrystalBallAbility(){
 void SabreAbility(){
 
 }
-void MermainAbility(){
+void MermaidAbility(){
 
 }
 void KrakenAbility(){
@@ -42,17 +42,24 @@ std::vector<std::function<void(void)>> Card::abilities =
 	CrystalBallAbility,
 	SabreAbility,
 	KrakenAbility,
-	MermainAbility
+	MermaidAbility
 };
 
 
 Card::Card(CardType t, int points, sf::Sprite sprite, std::function<void(void)> ability):
+		front_side_up_(false),
 		type_(t),
+		is_active_(false),
 		points_(points),
 		sprite_(sprite),
-		ability_(ability),
-		front_side_up_(false),
-		is_active_(false)
-		{	
+		ability_(ability){	
 }
 
+
+bool Card::operator<(const Card& c){
+
+	if(type_ != c.type_)
+		return type_ < c.type_;
+	else
+		return points_ < c.points_;
+}

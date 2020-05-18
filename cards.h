@@ -17,7 +17,7 @@ public:
 		CrystalBall,
 		Sabre,
 		Kraken,
-		Mermain
+		Mermaid
 	};
 
 	enum Dir{
@@ -30,15 +30,16 @@ public:
 	Card(CardType t, int points, sf::Sprite sprite, std::function<void(void)> ability);
 
 	void ApplyAbility(){ ability_();}
+
 	void Draw();
 
-	bool IsClicked(const sf::Vector2i& xy);
 	bool IsClicked(int x, int y); 
-
 	//
 	void SetupSprite();
 
 	void Flip(){ front_side_up_ = !front_side_up_;}
+
+	bool operator<(const Card&);
 
 //protected:
 	bool front_side_up_; //front or back side up
@@ -60,7 +61,7 @@ void ChestAbility();
 void ScrollAbility();
 void CrystalBallAbility();
 void SabreAbility();
-void MermainAbility();
+void MermaidAbility();
 void KrakenAbility();
 
 struct CardHolder{

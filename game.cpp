@@ -3,15 +3,15 @@
 #include <algorithm>
 #include <random>
 
-Gameboard::Gameboard():
-	window_(nullptr){
-
+Gameboard::Gameboard(){//:
+	//window_(sf::RenderWindow(sf::VideoMode(500, 500), "Dead Man's Draw", sf::Style::Default)){
+//	window_.create({500, 500, 32}, " sdfsdf", sf::Style::Default);
 	Init();	
 }
 
 void Gameboard::Init(){
 
-	window_ = new sf::RenderWindow(sf::VideoMode(width, height), "Best Game", sf::Style::Default);
+	window_ = new sf::RenderWindow(sf::VideoMode(width, height), "Dead Man's Draw", sf::Style::Default);
 	assert(window_);
 
 	t_manager_.LoadAll();
@@ -22,31 +22,45 @@ void Gameboard::Init(){
 
 	for(int points = 2; points <= 7; points++){
 		for(auto& t: types){
-			c_manager_.cards.push_back(Card(t, points, sf::Sprite(t_manager_.Get(t)), Card::abilities[t]));
+			c_manager_.cards.push_back(std::move(Card(t, points, sf::Sprite(t_manager_.Get(t)), Card::abilities[t])));
 		}		
 	}
 
-	Card::CardType m = Card::Mermain; 
+	Card::CardType m = Card::Mermaid; 
 
 	for(int points = 4; points <= 9; points++){
-		c_manager_.cards.push_back(Card(m, points, sf::Sprite(t_manager_.Get(m)), Card::abilities[m]));
+		c_manager_.cards.push_back(std::move(Card(m, points, sf::Sprite(t_manager_.Get(m)), Card::abilities[m])));
 	}
 	//TO DO: cut correctly from textures
+
+	assert(c_manager_.cards.size() == 60);
 
 	//puttng cards in the deck
 	deck_.resize(c_manager_.cards.size());
 	
-	for(int i = 0; i < deck_.size() - 1; i++){
-		deck_[i] = &c_manager_.cards[i];
+	assert(deck_.size() == 60);
+
+	for(size_t i = 0; i < deck_.size(); i++){
+		deck_[i] = &(c_manager_.cards[i]);
+		assert(deck_[i]);
 	}
-	//
+
+	assert(deck_.size() == 60);
+
 	for(auto& card: c_manager_.cards){
 		//pos in sprite, size
-		card.size_ = basic_size;
-		card.sprite_.setTextureRect(sf::IntRect({300, 300}, card.size_)); ///////<<<<---------
-		card.sprite_.setOrigin(card.size_.x / 2, card.size_.y / 2); 
-		card.sprite_.setColor(sf::Color::Red);
+		card.size_ = {740, 1030};
+		sf::Vector2i pos_in_tex;
+
+		if(card.type_ == Card::Mermaid)
+			pos_in_tex = {(card.points_ - 4) * card.size_.x, 0};
+		else
+			pos_in_tex = {(card.points_ - 2) * card.size_.x, 0};
+
+		card.sprite_.setTextureRect(sf::IntRect(pos_in_tex, card.size_)); ///////<<<<---------
+		card.sprite_.scale(0.15f, 0.15f);
 		card.sprite_.setPosition(deck_pos);
+
 	}
 
 	//setting table;
@@ -66,15 +80,25 @@ void Gameboard::Finish(){
 }
 
 
+Card* Gameboard::GetCardFromDeck(){
+	Card* card = deck_.back();
+	assert(card);
+	deck_.pop_back();
+
+	return card;
+}
+
+
 std::random_device rd;
 std::mt19937 g(rd());
 
-void Gameboard::Shuffle(std::vector<Card*> deck){
-	std::shuffle(deck.begin(), deck.end(), g);
+void Gameboard::ShuffleDeck(){
+	std::shuffle(deck_.begin(), deck_.end(), g);
 }
 
 
 void Gameboard::Draw(){
+	assert(window_);
 
 	window_->clear();
 

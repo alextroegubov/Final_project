@@ -13,12 +13,14 @@ public:
 
 	void LoadAll();
 
-//	sf::Texture& get(Card::CardType id);
+	sf::Texture& get(Card::CardType id);
 
 	const sf::Texture& Get(int id) const;
+
+	~TextureManager();
 
 private:
 	void Load(int id, const std::string& filename);
 
-	std::map<int, std::unique_ptr<sf::Texture>> textures_;
+	std::map<int, sf::Texture*> textures_;
 };

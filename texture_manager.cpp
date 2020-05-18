@@ -3,19 +3,27 @@
 
 void TextureManager::Load(int id, const std::string& filename){
 	
-	std::unique_ptr<sf::Texture> texture(new sf::Texture());
+	sf::Texture* new_texture = new sf::Texture();
+	assert(new_texture);
 
-	if(!texture->loadFromFile(filename))
+	if(!new_texture->loadFromFile(filename))
 		assert("can't load from file");
 	
-	textures_[id] = std::move(texture);
+	textures_[id] = new_texture;
+}
+
+
+TextureManager::~TextureManager(){
+	for(auto& item: textures_)
+		delete item.second;
 }
 
 
 const sf::Texture& TextureManager::Get(int id) const{
 
-	auto found = textures_.find(id);
-	return *found->second;
+	assert(textures_.at(id));
+
+	return *(textures_.at(id));
 }
 
 void TextureManager::LoadAll(){
@@ -30,7 +38,7 @@ void TextureManager::LoadAll(){
 		{Card::CardType::Scroll, 		"images/Scroll.png"},
 		{Card::CardType::CrystalBall, 	"images/CrystalBall.png"},
 		{Card::CardType::Sabre, 		"images/Sabre.png"},
-		{Card::CardType::Mermain, 		"images/Mermain.png"},
+		{Card::CardType::Mermaid, 		"images/Mermaid.png"},
 		{Card::CardType::Kraken, 		"images/Kraken.png"}
 	};
 
@@ -40,4 +48,6 @@ void TextureManager::LoadAll(){
 	
 	Load(Table, "images/Table.png");
 	textures_[Table]->setRepeated(true);
+
+	assert(textures_.size() == 11);
 }
