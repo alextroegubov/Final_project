@@ -4,9 +4,35 @@
 #include <random>
 
 Gameboard::Gameboard(){//:
-	//window_(sf::RenderWindow(sf::VideoMode(500, 500), "Dead Man's Draw", sf::Style::Default)){
-//	window_.create({500, 500, 32}, " sdfsdf", sf::Style::Default);
-	Init();	
+	Init();
+}
+
+void Gameboard::CreateCards(){
+
+	std::vector<Card::CardType> types = {Card::Cannon, Card::Anchor, Card::Hook, Card::Key, Card::Chest, 
+										 Card::Scroll, Card::CrystalBall, Card::Sabre, Card::Kraken};
+	//adding all types exept mermaid
+	for(int points = 2; points <= 7; points++){
+		for(auto& t: types){
+			card_holder_.push_back(std::move(Card(t, points, sf::Sprite(t_manager_.Get(t)), Card::abilities[t])));
+		}		
+	}
+
+	//adding mermaid
+	Card::CardType m = Card::Mermaid; 
+	for(int points = 4; points <= 9; points++){
+		card_holder_.push_back(std::move(Card(m, points, sf::Sprite(t_manager_.Get(m)), Card::abilities[m])));
+	}
+	assert(card_holder_.size() == 60);
+
+	//puttng cards in the deck
+	deck_.resize(card_holder_.size());
+
+	for(size_t i = 0; i < deck_.size(); i++){
+		deck_[i] = &(card_holder_.at(i));
+		assert(deck_.at(i));
+	}
+	assert(deck_.size() == 60);
 }
 
 void Gameboard::Init(){
@@ -16,39 +42,10 @@ void Gameboard::Init(){
 
 	t_manager_.LoadAll();
 
-	//creating cards
-	std::vector<Card::CardType> types = {Card::Cannon, Card::Anchor, Card::Hook, Card::Key, Card::Chest, 
-										 Card::Scroll, Card::CrystalBall, Card::Sabre, Card::Kraken};
-
-	for(int points = 2; points <= 7; points++){
-		for(auto& t: types){
-			c_manager_.cards.push_back(std::move(Card(t, points, sf::Sprite(t_manager_.Get(t)), Card::abilities[t])));
-		}		
-	}
-
-	Card::CardType m = Card::Mermaid; 
-
-	for(int points = 4; points <= 9; points++){
-		c_manager_.cards.push_back(std::move(Card(m, points, sf::Sprite(t_manager_.Get(m)), Card::abilities[m])));
-	}
-	//TO DO: cut correctly from textures
-
-	assert(c_manager_.cards.size() == 60);
-
-	//puttng cards in the deck
-	deck_.resize(c_manager_.cards.size());
+	CreateCards();
 	
-	assert(deck_.size() == 60);
+	for(auto& card: card_holder_){
 
-	for(size_t i = 0; i < deck_.size(); i++){
-		deck_[i] = &(c_manager_.cards[i]);
-		assert(deck_[i]);
-	}
-
-	assert(deck_.size() == 60);
-
-	for(auto& card: c_manager_.cards){
-		//pos in sprite, size
 		card.size_ = {740, 1030};
 		sf::Vector2i pos_in_tex;
 
@@ -60,17 +57,15 @@ void Gameboard::Init(){
 		card.sprite_.setTextureRect(sf::IntRect(pos_in_tex, card.size_)); ///////<<<<---------
 		card.sprite_.scale(0.15f, 0.15f);
 		card.sprite_.setPosition(deck_pos);
-
 	}
 
-	//setting table;
+	//setting backstage
 	table_sprite_.setTexture(t_manager_.Get(TextureManager::Table));
 	table_sprite_.setTextureRect(sf::IntRect({0,0}, {width, height}));
 }
 
 Gameboard::~Gameboard(){
 	Finish();
-
 	delete window_;
 }
 
@@ -104,7 +99,7 @@ void Gameboard::Draw(){
 
 	window_->draw(table_sprite_);
 
-	for(const auto& card: c_manager_.cards){
+	for(const auto& card: card_holder_){
 		window_->draw(card.sprite_);
 	}
 

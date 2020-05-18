@@ -63,7 +63,3 @@ void CrystalBallAbility();
 void SabreAbility();
 void MermaidAbility();
 void KrakenAbility();
-
-struct CardHolder{
-	std::vector<Card> cards;
-};

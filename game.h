@@ -14,24 +14,33 @@ public:
 	const int width = 1300;
 	const int height = 720;
 
-	const sf::Vector2i basic_size = {90, 135};
+//	const sf::Vector2i basic_size = {90, 135};
 
-	const sf::Vector2f deck_pos = 		{(float)width - basic_size.x - 80,  (float)height / 2};
-	const sf::Vector2f discard_pos = 	{(float)width - 50, 				(float)height / 2}; 
+	const sf::Vector2f deck_pos = 		{(float)width - 200, (float)height / 2 + 200};
+	const sf::Vector2f discard_pos = 	{(float)width - 50,  (float)height / 2 + 200}; 
  
 	Gameboard(Gameboard&) = delete;
 	Gameboard& operator=(Gameboard&) = delete;
 
 	Gameboard();
-	void Init();
+
 	void StartGame();
 	~Gameboard();
 
-	void ShuffleDeck();
 	Card* GetCardFromDeck();
+
+	void ShuffleDeck();
+	void ShuffleDiscard();
+
 	void DiscardGameArea();
+	std::vector<Card*> GetGameArea();
+
 	void Finish();
 	void Draw();
+
+private:
+	void Init();
+	void CreateCards();
 
 private:
 	std::vector<Card*> discard_;
@@ -43,7 +52,7 @@ private:
 	sf::Sprite table_sprite_;
 
 	TextureManager t_manager_;
-	CardHolder c_manager_;
+	std::vector<Card> card_holder_;
 
 	bool is_done_;
 };
