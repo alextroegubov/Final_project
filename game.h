@@ -5,20 +5,30 @@
 #include "cards.h"
 #include "player.h"
 #include "texture_manager.hpp"
+/*
+#define DX 20
+#define DY 20
+#define CARD_X 90
+#define CARD_Y 140
+#define BORDER 25
+*/
+const int DX  = 20;
+const int DY  = 20;
+const int CARD_X  = 90;
+const int CARD_Y  = 140;
+const int BORDER  = 25;
 
-//#define width 1024
-//#define height 720
 
 class Gameboard{
 public:
-	const int width = 1300;
-	const int height = 720;
+
+	sf::Vector2i GetWinSz(){ return win_sz_;}
 
 //	const sf::Vector2i basic_size = {90, 135};
 
-	const sf::Vector2f deck_pos = 		{(float)width - 200, (float)height / 2 - 100};
-	const sf::Vector2f discard_pos = 	{(float)width - 50,  (float)height / 2 - 100}; 
- 
+	sf::Vector2f deck_pos;
+	sf::Vector2f discard_pos;
+
 	Gameboard(Gameboard&) = delete;
 	Gameboard& operator=(Gameboard&) = delete;
 
@@ -39,6 +49,10 @@ public:
 
 	std::vector<Card*> GetGameArea();
 
+	bool CheckGameArea(Card* card);
+
+	void Run();
+
 	void Finish();
 	void Draw();
 
@@ -48,7 +62,7 @@ private:
 	void Init();
 	//
 	void CreateWindow();
-	//FIXME: add specific sizes of sprites
+	//FIXME: add specific sizes of sprites !?!?!?!?
 	void CreateCards();
 
 private:
@@ -64,4 +78,5 @@ private:
 	std::vector<Card> card_holder_;
 
 	bool is_done_;
+	sf::Vector2i win_sz_;
 };

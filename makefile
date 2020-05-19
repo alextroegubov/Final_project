@@ -8,7 +8,7 @@ PROG_LIB = game.h player.h cards.h texture_manager.hpp
 
 #PROG_CPP = .cpp
 
-all: $(PROG) clean
+all: $(PROG)
 
 $(PROG): $(PROG_OBJ) $(PROG_LIB)
 	$(CXX) -fsanitize=address -o $@ $(PROG_OBJ) $(CXXFLAGS)

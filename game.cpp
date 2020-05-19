@@ -2,14 +2,21 @@
 #include <cassert>
 #include <algorithm>
 #include <random>
+#include <thread>
 
-Gameboard::Gameboard(){//:
+Gameboard::Gameboard():
+	win_sz_({1300, 768}),
+	is_done_(false){
+
+	deck_pos = 		{(float)win_sz_.x - (CARD_X + DX), 	(float)win_sz_.y / 2 - CARD_Y / 2};
+	discard_pos = 	{(float)win_sz_.x - BORDER,  		(float)win_sz_.y / 2 - CARD_Y / 2};
+
 	Init();
 }
 
 void Gameboard::CreateWindow(){
 
-	window_ = new sf::RenderWindow(sf::VideoMode(width, height), "Dead Man's Draw", sf::Style::Default);
+	window_ = new sf::RenderWindow(sf::VideoMode(win_sz_.x, win_sz_.y), "Dead Man's Draw", sf::Style::Default);
 	assert(window_);
 }
 
@@ -35,7 +42,7 @@ void Gameboard::CreateCards(){
 	deck_.resize(card_holder_.size());
 
 	for(size_t i = 0; i < deck_.size(); i++){
-		deck_[i] = &(card_holder_.at(i));
+		deck_.at(i) = &(card_holder_.at(i));
 		assert(deck_.at(i));
 	}
 	assert(deck_.size() == 60);
@@ -50,7 +57,7 @@ void Gameboard::Init(){
 
 	for(auto& card: card_holder_){
 
-		card.size_ = {740, 1030};
+		card.size_ = {740, 1030}; //basic size in texture
 		sf::Vector2i pos_in_tex;
 
 		if(card.type_ == Card::Mermaid)
@@ -59,13 +66,13 @@ void Gameboard::Init(){
 			pos_in_tex = {(card.points_ - 2) * card.size_.x, 0};
 
 		card.sprite_.setTextureRect(sf::IntRect(pos_in_tex, card.size_)); ///////<<<<---------
-		card.sprite_.scale(0.15f, 0.15f);
+		card.sprite_.scale((float)CARD_X / card.size_.x, (float)CARD_Y / card.size_.y);
 		card.sprite_.setPosition(deck_pos);
 	}
 
 	//setting backstage
 	table_sprite_.setTexture(t_manager_.Get(TextureManager::Table));
-	table_sprite_.setTextureRect(sf::IntRect({0,0}, {width, height}));
+	table_sprite_.setTextureRect(sf::IntRect({0,0}, win_sz_));
 }
 
 Gameboard::~Gameboard(){
@@ -79,6 +86,18 @@ void Gameboard::Finish(){
 }
 
 
+bool Gameboard::CheckGameArea(Card* card){
+
+	auto b = game_area_.begin();
+	auto e = game_area_.end() - 1;
+	auto found = std::find_if(b, e, [card](Card* c){return (card->type_ == c->type_);});
+
+	if(found != e){
+		std::this_thread::sleep_for(std::chrono::seconds(1));
+		DiscardGameArea();
+	}
+}
+
 Card* Gameboard::DrawCard(){
 	//add animation//
 
@@ -86,8 +105,10 @@ Card* Gameboard::DrawCard(){
 	assert(card);
 	deck_.pop_back();
 	//20 - between cards, 25 - margin
-	card->sprite_.setPosition(30 + (/*card->size_.x*/100 + 25) * game_area_.size() , height / 2 - /*card->size_.y*/ 150 / 2);
-
+	card->sprite_.setPosition(	BORDER + (DX + CARD_X) * game_area_.size() , 
+								win_sz_.y / 2 - CARD_Y / 2);
+//	printf("sprite_pos = (%f, %f)\n", BORDER + (DX + CARD_X) * game_area_.size(), win_sz_.y / 2 - CARD_Y / 2);
+	
 	game_area_.push_back(card);
 	ProcessCard(card);
 
@@ -109,6 +130,7 @@ void Gameboard::ShuffleDiscard(){
 }
 
 void Gameboard::ProcessCard(Card* card){
+
 	return;
 }
 
@@ -124,9 +146,43 @@ void Gameboard::DiscardGameArea(){
 	game_area_.clear();
 }
 
+
+void Gameboard::Run(){
+
+	Card* new_card = nullptr;
+
+	while(!is_done_){
+
+		if(game_area_.size()){
+			assert(new_card);
+			CheckGameArea(new_card);
+		}
+		else
+			ProcessCard(new_card);
+
+		sf::Event event;
+		window_->pollEvent(event);
+		
+		switch(event.type){
+			case sf::Event::Closed:
+				Finish();
+		}
+
+		new_card = DrawCard();
+
+		std::this_thread::sleep_for(std::chrono::seconds(1));
+		
+		Draw();
+	}
+}
+
 //
 void Gameboard::Draw(){
 	assert(window_);
+
+	printf("deck_pos = (%f,%f)\n", deck_pos.x, deck_pos.y);
+	printf("window size = (%lu, %lu)\n", window_->getSize().x,
+										 window_->getSize().y);
 
 	window_->clear();
 

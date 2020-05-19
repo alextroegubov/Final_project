@@ -41,6 +41,8 @@ public:
 
 	bool operator<(const Card&);
 
+	void Update();
+
 //protected:
 	bool front_side_up_; //front or back side up
 	enum CardType type_;

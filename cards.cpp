@@ -63,3 +63,7 @@ bool Card::operator<(const Card& c){
 	else
 		return points_ < c.points_;
 }
+
+void Card::SetupSprite(){
+	;
+}

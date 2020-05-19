@@ -10,13 +10,8 @@ int main(){
 	game.Draw();
 	game.ShuffleDeck();
 
-	int i = 0;
-	while((i++) < 8){
-		std::this_thread::sleep_for(std::chrono::seconds(2));
-		game.DrawCard();
-		game.Draw();
-	}
-
+	game.Run();
+	
 	std::this_thread::sleep_for(std::chrono::seconds(3));
 	return 0;
 };
