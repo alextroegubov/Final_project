@@ -23,9 +23,6 @@ class Gameboard{
 public:
 
 	sf::Vector2i GetWinSz(){ return win_sz_;}
-
-//	const sf::Vector2i basic_size = {90, 135};
-
 	sf::Vector2f deck_pos;
 	sf::Vector2f discard_pos;
 
@@ -38,26 +35,33 @@ public:
 	~Gameboard();
 
 	//
-	Card* DrawCard();
+	Card* DrawCardFromDeck();
+	//
+	Card* DrawCardFromDiscard();
 
+	Card* PutCardInGameArea();
 	//
 	void ShuffleDeck();
 	//
 	void ShuffleDiscard();
 	//
+	void DiscardCard(Card*);
+	//
 	void DiscardGameArea();
 
 	std::vector<Card*> GetGameArea();
 
-	bool CheckGameArea(Card* card);
+	void AddPlayer(Player* p);
 
 	void Run();
 
 	void Finish();
+	//change to paint
 	void Draw();
 
 private:
 	void ProcessCard(Card* card);
+	bool CheckGameArea(Card* card);
 
 	void Init();
 	//
@@ -71,6 +75,7 @@ private:
 	std::vector<Card*> deck_;
 
 	std::vector<Player*> players_;
+	int act_pl_; // = 0;
 
 	sf::RenderWindow* window_; //1366 * 1024
 	sf::Sprite table_sprite_;

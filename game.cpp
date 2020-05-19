@@ -6,10 +6,11 @@
 
 Gameboard::Gameboard():
 	win_sz_({1300, 768}),
-	is_done_(false){
+	is_done_(false),
+	act_pl_(0){
 
-	deck_pos = 		{(float)win_sz_.x - (CARD_X + DX), 	(float)win_sz_.y / 2 - CARD_Y / 2};
-	discard_pos = 	{(float)win_sz_.x - BORDER,  		(float)win_sz_.y / 2 - CARD_Y / 2};
+	discard_pos = 	{(float)win_sz_.x - CARD_X - BORDER, (float)win_sz_.y / 2 - CARD_Y / 2};
+	deck_pos = 		{discard_pos.x - (CARD_X + DX), 	 discard_pos.y};
 
 	Init();
 }
@@ -85,32 +86,91 @@ void Gameboard::Finish(){
 	window_->close();
 }
 
+void Gameboard::AddPlayer(Player* p){
+	assert(p);
 
+	players_.push_back(p);
+}
+
+//
 bool Gameboard::CheckGameArea(Card* card){
 
 	auto b = game_area_.begin();
 	auto e = game_area_.end() - 1;
-	auto found = std::find_if(b, e, [card](Card* c){return (card->type_ == c->type_);});
 
-	if(found != e){
+	auto duplicate = std::find_if(b, e, [card](Card* c){return (card->type_ == c->type_);});
+	auto anchor = std::find_if(b, e, [](Card* c){return (c->type_ == Card::Anchor);});
+
+	if(duplicate != e){
+		//found duplicate
 		std::this_thread::sleep_for(std::chrono::seconds(1));
+		
+		if(anchor != e){
+
+			std::vector<Card*> to_take;
+			
+			for(auto i = b; i != anchor; i++){
+				to_take.push_back(*i);
+			}	
+			game_area_.erase(b, anchor);
+
+			players_.at(act_pl_)->TakeCards(std::move(to_take));
+		}
+		
 		DiscardGameArea();
+		return false;
 	}
+
+	return true;
 }
 
-Card* Gameboard::DrawCard(){
-	//add animation//
+//
+void Gameboard::DiscardGameArea(){
+	
+	for(auto& c: game_area_){
+		assert(c);
+		DiscardCard(c);
+	}
 
-	Card* card = deck_.back();
+	game_area_.clear();
+}
+
+
+Card* Gameboard::PutCardInGameArea(){
+	
+	Card* card = DrawCardFromDeck();
 	assert(card);
-	deck_.pop_back();
-	//20 - between cards, 25 - margin
+
 	card->sprite_.setPosition(	BORDER + (DX + CARD_X) * game_area_.size() , 
 								win_sz_.y / 2 - CARD_Y / 2);
-//	printf("sprite_pos = (%f, %f)\n", BORDER + (DX + CARD_X) * game_area_.size(), win_sz_.y / 2 - CARD_Y / 2);
 	
 	game_area_.push_back(card);
-	ProcessCard(card);
+
+	return card;
+}
+
+//gets the top card from discard pill
+Card* Gameboard::DrawCardFromDiscard(){
+	
+	if(discard_.size() == 0)
+		return nullptr;
+	
+	Card* card = discard_.back();
+	discard_.pop_back();
+
+	assert(card);
+	return card;	
+}
+
+//gets the top card from deck
+Card* Gameboard::DrawCardFromDeck(){
+	//add animation//
+	if(deck_.size() == 0)
+		//game is over, do smth
+		return nullptr;
+
+	Card* card = deck_.back();
+	deck_.pop_back();
 
 	return card;
 }
@@ -134,16 +194,12 @@ void Gameboard::ProcessCard(Card* card){
 	return;
 }
 
-
 //
-void Gameboard::DiscardGameArea(){
-	for(auto& card: game_area_){
-		assert(card);
-		discard_.push_back(card);
-		card->sprite_.setPosition(discard_pos);
-	}
+void Gameboard::DiscardCard(Card* c){
 
-	game_area_.clear();
+	assert(c);
+	discard_.push_back(c);
+	c->sprite_.setPosition(discard_pos);
 }
 
 
@@ -153,7 +209,7 @@ void Gameboard::Run(){
 
 	while(!is_done_){
 
-		if(game_area_.size()){
+		if(game_area_.size() != 0){
 			assert(new_card);
 			CheckGameArea(new_card);
 		}
@@ -168,7 +224,7 @@ void Gameboard::Run(){
 				Finish();
 		}
 
-		new_card = DrawCard();
+		new_card = PutCardInGameArea();
 
 		std::this_thread::sleep_for(std::chrono::seconds(1));
 		

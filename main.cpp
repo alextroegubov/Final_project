@@ -9,7 +9,7 @@ int main(){
 	
 	game.Draw();
 	game.ShuffleDeck();
-
+	game.AddPlayer(&p1);
 	game.Run();
 	
 	std::this_thread::sleep_for(std::chrono::seconds(3));

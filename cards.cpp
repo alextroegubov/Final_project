@@ -4,16 +4,16 @@ void CannonAbility(){
 
 }
 void AnchorAbility(){
-
+	return;
 }
 void HookAbility(){
 
 }
 void KeyAbility(){
-
+	return;
 }
 void ChestAbility(){
-
+	return;
 }
 void ScrollAbility(){
 
@@ -25,7 +25,7 @@ void SabreAbility(){
 
 }
 void MermaidAbility(){
-
+	return;
 }
 void KrakenAbility(){
 

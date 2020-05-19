@@ -8,7 +8,9 @@ public:
 	Player();
 	int CalculateScore();
 
-	void DrawCard(Card* card);
+	void AddCard(Card* card);
+
+	void TakeCards(std::vector<Card*>);
 	
 private:
 	std::vector<std::vector<Card*>> cards_;
