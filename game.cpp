@@ -87,40 +87,6 @@ bool Gameboard::CheckGameArea(Card* card){
 	return true;
 }
 
-
-void Gameboard::TakeGameArea(){
-
-	auto b = game_area_.begin();
-	auto e = game_area_.end();
-
-	auto key = std::find_if(b, e, [](Card* c){return (c->type_ == Card::Key);});
-	auto chest = std::find_if(b, e, [](Card* c){return (c->type_ == Card::Chest);});
-
-	std::vector<Card*> to_take(game_area_);
-
-	Card* taken_card = nullptr;
-
-	if(key != e && chest != e){
-
-		ShuffleDiscard();
-		
-		for(int i = 0; i < game_area_.size(); i++){
-
-			taken_card = DrawCardFromDiscard();
-
-			if(taken_card){
-				to_take.push_back(taken_card);
-				taken_card->is_active_ = true;
-			}
-			else 
-				break;
-		}
-	}
-	players_.at(act_pl_)->TakeCards(std::move(to_take));
-
-	game_area_.clear();
-}
-
 //
 void Gameboard::DiscardGameArea(){
 	
@@ -214,24 +180,17 @@ void Gameboard::Run(){
 			ProcessCard(new_card);
 
 		sf::Event event;
-
 		ui_.GetWindow().pollEvent(event);
 		
 		switch(event.type){
-
 			case sf::Event::Closed:
 				Finish();
-				break;
-			case sf::Event::MouseButtonPressed:
-
-				if(event.key.code == sf::Mouse::Left)
-					new_card = PutCardInGameArea();
-				else 
-					TakeGameArea();
-				std::this_thread::sleep_for(std::chrono::milliseconds(200));
-				break;
 		}
 
+		new_card = PutCardInGameArea();
+
+		std::this_thread::sleep_for(std::chrono::seconds(1));
+		
 		Draw();
 	}
 }

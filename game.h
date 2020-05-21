@@ -38,8 +38,6 @@ public:
 	void DiscardCard(Card*);
 	//
 	void DiscardGameArea();
-	//
-	void TakeGameArea();
 
 	std::vector<Card*> GetGameArea();
 
