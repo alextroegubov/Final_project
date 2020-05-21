@@ -30,6 +30,8 @@ Ui::Ui():
 void Ui::CreateWindow(){
 
 	window_ = new sf::RenderWindow(sf::VideoMode(win_sz_.x, win_sz_.y), "Dead Man's Draw", sf::Style::Default);
+	window_->setFramerateLimit(30);
+	
 	assert(window_);
 }
 
