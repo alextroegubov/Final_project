@@ -28,7 +28,9 @@ public:
 	Card* DrawCardFromDeck();
 	//
 	Card* DrawCardFromDiscard();
-
+	//
+	void TakeGameArea();
+	//
 	Card* PutCardInGameArea();
 	//
 	void ShuffleDeck();
