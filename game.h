@@ -5,6 +5,7 @@
 #include "cards.h"
 #include "player.h"
 #include "texture_manager.hpp"
+#include "ui.h"
 /*
 #define DX 20
 #define DY 20
@@ -12,20 +13,9 @@
 #define CARD_Y 140
 #define BORDER 25
 */
-const int DX  = 20;
-const int DY  = 20;
-const int CARD_X  = 90;
-const int CARD_Y  = 140;
-const int BORDER  = 25;
-
 
 class Gameboard{
 public:
-
-	sf::Vector2i GetWinSz(){ return win_sz_;}
-	sf::Vector2f deck_pos;
-	sf::Vector2f discard_pos;
-
 	Gameboard(Gameboard&) = delete;
 	Gameboard& operator=(Gameboard&) = delete;
 
@@ -77,11 +67,9 @@ private:
 	std::vector<Player*> players_;
 	int act_pl_; // = 0;
 
-	sf::RenderWindow* window_; //1366 * 1024
-	sf::Sprite table_sprite_;
-	TextureManager t_manager_;
+
 	std::vector<Card> card_holder_;
 
+	Ui ui_;
 	bool is_done_;
-	sf::Vector2i win_sz_;
 };

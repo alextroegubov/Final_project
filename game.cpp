@@ -5,38 +5,23 @@
 #include <thread>
 
 Gameboard::Gameboard():
-	win_sz_({1300, 768}),
 	is_done_(false),
 	act_pl_(0){
 
-	discard_pos = 	{(float)win_sz_.x - CARD_X - BORDER, (float)win_sz_.y / 2 - CARD_Y / 2};
-	deck_pos = 		{discard_pos.x - (CARD_X + DX), 	 discard_pos.y};
-
 	Init();
-}
-
-void Gameboard::CreateWindow(){
-
-	window_ = new sf::RenderWindow(sf::VideoMode(win_sz_.x, win_sz_.y), "Dead Man's Draw", sf::Style::Default);
-	assert(window_);
 }
 
 void Gameboard::CreateCards(){
 
 	std::vector<Card::CardType> types = {Card::Cannon, Card::Anchor, Card::Hook, Card::Key, Card::Chest, 
-										 Card::Scroll, Card::CrystalBall, Card::Sabre, Card::Kraken};
-	//adding all types exept mermaid
+										 Card::Scroll, Card::CrystalBall, Card::Sabre, Card::Kraken, Card::Mermaid};
+
 	for(int points = 2; points <= 7; points++){
 		for(auto& t: types){
-			card_holder_.push_back(std::move(Card(t, points, sf::Sprite(t_manager_.Get(t)), Card::abilities[t])));
+			card_holder_.push_back(Card(t, (t == Card::Mermaid) ? points + 2 : points, Card::abilities[t]));
 		}		
 	}
 
-	//adding mermaid
-	Card::CardType m = Card::Mermaid; 
-	for(int points = 4; points <= 9; points++){
-		card_holder_.push_back(std::move(Card(m, points, sf::Sprite(t_manager_.Get(m)), Card::abilities[m])));
-	}
 	assert(card_holder_.size() == 60);
 
 	//puttng cards in the deck
@@ -51,39 +36,17 @@ void Gameboard::CreateCards(){
 
 void Gameboard::Init(){
 
-	t_manager_.LoadAll();
-
 	CreateCards();
-	CreateWindow();
 
-	for(auto& card: card_holder_){
-
-		card.size_ = {740, 1030}; //basic size in texture
-		sf::Vector2i pos_in_tex;
-
-		if(card.type_ == Card::Mermaid)
-			pos_in_tex = {(card.points_ - 4) * card.size_.x, 0};
-		else
-			pos_in_tex = {(card.points_ - 2) * card.size_.x, 0};
-
-		card.sprite_.setTextureRect(sf::IntRect(pos_in_tex, card.size_)); ///////<<<<---------
-		card.sprite_.scale((float)CARD_X / card.size_.x, (float)CARD_Y / card.size_.y);
-		card.sprite_.setPosition(deck_pos);
-	}
-
-	//setting backstage
-	table_sprite_.setTexture(t_manager_.Get(TextureManager::Table));
-	table_sprite_.setTextureRect(sf::IntRect({0,0}, win_sz_));
 }
 
 Gameboard::~Gameboard(){
 	Finish();
-	delete window_;
 }
 
 void Gameboard::Finish(){
 	is_done_ = true;
-	window_->close();
+	
 }
 
 void Gameboard::AddPlayer(Player* p){
@@ -141,9 +104,9 @@ Card* Gameboard::PutCardInGameArea(){
 	Card* card = DrawCardFromDeck();
 	assert(card);
 
-	card->sprite_.setPosition(	BORDER + (DX + CARD_X) * game_area_.size() , 
-								win_sz_.y / 2 - CARD_Y / 2);
-	
+	card->is_active_ = true;
+	ui_.SetCardInGameArea(card, game_area_.size());
+
 	game_area_.push_back(card);
 
 	return card;
@@ -199,7 +162,7 @@ void Gameboard::DiscardCard(Card* c){
 
 	assert(c);
 	discard_.push_back(c);
-	c->sprite_.setPosition(discard_pos);
+	c->is_active_ = false;
 }
 
 
@@ -217,7 +180,7 @@ void Gameboard::Run(){
 			ProcessCard(new_card);
 
 		sf::Event event;
-		window_->pollEvent(event);
+		ui_.GetWindow().pollEvent(event);
 		
 		switch(event.type){
 			case sf::Event::Closed:
@@ -234,19 +197,15 @@ void Gameboard::Run(){
 
 //
 void Gameboard::Draw(){
-	assert(window_);
 
-	printf("deck_pos = (%f,%f)\n", deck_pos.x, deck_pos.y);
-	printf("window size = (%lu, %lu)\n", window_->getSize().x,
-										 window_->getSize().y);
+//	printf("deck_pos = (%f,%f)\n", deck_pos.x, deck_pos.y);
+//	printf("window size = (%lu, %lu)\n", window_->getSize().x,
+//										 window_->getSize().y);
+	ui_.BeginPaint();
+	assert(card_holder_.size() == 60);
+	ui_.PaintTable();
+	ui_.PaintCards(card_holder_);
 
-	window_->clear();
+	ui_.EndPaint();
 
-	window_->draw(table_sprite_);
-
-	for(const auto& card: card_holder_){
-		window_->draw(card.sprite_);
-	}
-
-	window_->display();
 }

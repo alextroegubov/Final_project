@@ -20,22 +20,13 @@ public:
 		Mermaid
 	};
 
-	enum Dir{
-		Up,
-		Right,
-		Down,
-		Left
-	};
-
-	Card(CardType t, int points, sf::Sprite sprite, std::function<void(void)> ability);
+	Card(CardType t, int points, std::function<void(void)> ability);
 
 	void ApplyAbility(){ ability_();}
 
 	void Draw();
 
 	bool IsClicked(int x, int y); 
-	//
-	void SetupSprite();
 
 	void Flip(){ front_side_up_ = !front_side_up_;}
 
@@ -50,8 +41,6 @@ public:
 	int points_;
 	sf::Vector2i size_;
 	sf::Vector2i pos_;
-	Dir dir_;
-	sf::Sprite sprite_;
 	std::function<void(void)> ability_;
 };
 

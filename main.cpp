@@ -6,8 +6,6 @@
 int main(){
 	Gameboard game;
 	Player p1, p2;
-	
-	game.Draw();
 	game.ShuffleDeck();
 	game.AddPlayer(&p1);
 	game.Run();

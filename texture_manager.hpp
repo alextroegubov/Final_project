@@ -8,7 +8,8 @@
 class TextureManager{
 public:
 	enum Id{
-		Table = 20
+		Table = 20,
+		Backside,
 	};
 
 	void LoadAll();

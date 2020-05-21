@@ -49,5 +49,7 @@ void TextureManager::LoadAll(){
 	Load(Table, "images/Table.png");
 	textures_[Table]->setRepeated(true);
 
-	assert(textures_.size() == 11);
+	Load(Backside, "images/Backside.png");
+
+	assert(textures_.size() == 12);
 }
