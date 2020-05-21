@@ -31,23 +31,8 @@ void KrakenAbility(){
 
 }
 
-std::vector<std::function<void(void)>> Card::abilities = 
-{
-	CannonAbility,
-	AnchorAbility,
-	HookAbility,
-	KeyAbility,
-	ChestAbility,
-	ScrollAbility,
-	CrystalBallAbility,
-	SabreAbility,
-	KrakenAbility,
-	MermaidAbility
-};
-
-
 Card::Card(CardType t, int points, std::function<void(void)> ability):
-		front_side_up_(false),
+//		front_side_up_(false),
 		type_(t),
 		is_active_(false),
 		points_(points),

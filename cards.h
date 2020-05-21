@@ -5,8 +5,6 @@
 
 class Card{
 public:
-	static std::vector<std::function<void(void)>> abilities;
-
 	enum CardType{
 		Cannon = 0,
 		Anchor,
@@ -28,14 +26,14 @@ public:
 
 	bool IsClicked(int x, int y); 
 
-	void Flip(){ front_side_up_ = !front_side_up_;}
+//	void Flip(){ front_side_up_ = !front_side_up_;}
 
 	bool operator<(const Card&);
 
 	void Update();
 
 //protected:
-	bool front_side_up_; //front or back side up
+//	bool front_side_up_; //front or back side up
 	enum CardType type_;
 	bool is_active_;
 	int points_;
@@ -43,14 +41,3 @@ public:
 	sf::Vector2i pos_;
 	std::function<void(void)> ability_;
 };
-
-void CannonAbility();
-void AnchorAbility();
-void HookAbility();
-void KeyAbility();
-void ChestAbility();
-void ScrollAbility();
-void CrystalBallAbility();
-void SabreAbility();
-void MermaidAbility();
-void KrakenAbility();

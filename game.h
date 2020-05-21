@@ -75,3 +75,29 @@ private:
 	Ui ui_;
 	bool is_done_;
 };
+
+
+void CannonAbility();
+void AnchorAbility();
+void HookAbility();
+void KeyAbility();
+void ChestAbility();
+void ScrollAbility();
+void CrystalBallAbility();
+void SabreAbility();
+void MermaidAbility();
+void KrakenAbility();
+
+std::vector<std::function<void(void)>> Abilities = 
+{
+	CannonAbility,
+	AnchorAbility,
+	HookAbility,
+	KeyAbility,
+	ChestAbility,
+	ScrollAbility,
+	CrystalBallAbility,
+	SabreAbility,
+	KrakenAbility,
+	MermaidAbility
+};
