@@ -76,6 +76,48 @@ Card* Gameboard::HookAbility(){
 
 
 Card* Gameboard::ScrollAbility(){
+
+	std::vector<Card*> cards;
+	Card* c = nullptr;
+
+	for(int i = 0; i < 3; i++){
+
+		c = DrawCardFromDiscard();
+
+		if(c != nullptr){
+			cards.push_back(c);
+			c->is_active_ = true;
+		}
+	}
+
+	if(cards.empty())
+		return nullptr;
+
+	ui_.ScrollAbilityOn(cards);
+
+	Draw();
+
+	sf::Event event;
+
+	while(true){
+
+		ui_.GetWindow().waitEvent(event);
+		//FIXME!!!!!!!!!
+		if(event.type == sf::Event::MouseButtonPressed){
+			for(auto& c: cards){
+				
+				if(c->IsClicked(sf::Mouse::getPosition(ui_.GetWindow()))){
+
+					for(auto& cc: cards)
+						DiscardCard(cc);
+
+					ui_.ScrollAbilityOff();
+
+					return PutCardInGameArea(c);			
+				}
+			}
+		}
+	}
 	return nullptr;
 }
 

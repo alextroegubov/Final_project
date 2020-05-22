@@ -23,6 +23,7 @@ public:
 	void Draw();
 
 	bool IsClicked(int x, int y);
+	bool IsClicked(sf::Vector2i pos);
 
 //	void Flip(){ front_side_up_ = !front_side_up_;}
 

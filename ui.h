@@ -32,6 +32,9 @@ public:
 
 
 	void PainterDeck();
+	void ScrollAbilityOn(std::vector<Card*>&);
+	void ScrollAbilityOff();
+
 	sf::RenderWindow& GetWindow(){ return *window_;}
 	void SetCardInGameArea(Card* card, int n);
 	void SetCardForPlayer(int n, const std::vector<Card*>&);
@@ -45,6 +48,7 @@ private:
 	std::vector<std::vector<sf::Sprite>> sprites_;
 	sf::Vector2i win_sz_;
 	bool is_done_;
+	bool scroll_on_;
 
 	sf::Sprite backside_;
 	sf::Sprite table_sprite_;

@@ -22,3 +22,9 @@ bool Card::IsClicked(int x, int y){
 	return  (pos_.x <= x) && (x <= pos_.x + size_.x) &&
 			(pos_.y <= y) && (y <= pos_.y + size_.y);
 }
+
+
+bool Card::IsClicked(sf::Vector2i pos){
+
+	return IsClicked(pos.x, pos.y);	
+}

@@ -7,6 +7,8 @@ Ui* Ui::ui_entity = nullptr;
 Ui::~Ui(){
 
 	window_->close();
+	music_.stop();
+	
 	delete window_;
 }
 
@@ -26,17 +28,20 @@ Ui::Ui():
 		if (!music_.openFromFile("Sound/Music.ogg"))
 			assert("music");
 
+		music_.setLoop(true);
 		music_.play();
 
 		ui_entity = this;
 
 }
 
+
 void Ui::CreateWindow(){
 
 	window_ = new sf::RenderWindow(sf::VideoMode(win_sz_.x, win_sz_.y), "Dead Man's Draw", sf::Style::Default);
 	assert(window_);
 }
+
 
 void Ui::CreateSprites(){
 
@@ -88,12 +93,11 @@ void Ui::SetCardInGameArea(Card* card, int n){
 
 	assert(pos < 6);
 
-	sprites_.at(t).at(pos).setPosition(	BORDER + (DX + CARD_X) * n,  //?? n - 1 
-										win_sz_.y / 2 - CARD_Y / 2);
-	card->pos_ = {BORDER + (DX + CARD_X) * n,  win_sz_.y / 2 - CARD_Y / 2};
+	sprites_.at(t).at(pos).setPosition(BORDER + (DX + CARD_X) * n, win_sz_.y / 2 - CARD_Y / 2);
 
-	printf("game area - ok!\n");
+	card->pos_ = {BORDER + (DX + CARD_X) * n,  win_sz_.y / 2 - CARD_Y / 2};
 }
+
 
 void Ui::PaintCards(const std::vector<Card>& cards){
 	assert(window_);
@@ -115,7 +119,16 @@ void Ui::PaintCards(const std::vector<Card>& cards){
 	}
 }
 
+
 void Ui::PaintTable(){
+
+	static sf::Vector2i size = {3 * CARD_X + 3 * DX, CARD_Y + DY / 2};
+	static sf::Vector2f pos = {deck_pos_.x - size.x, deck_pos_.y};
+
+	static sf::RectangleShape rect({size.x, size.y});
+
+	rect.setFillColor(sf::Color::Black);
+	rect.setPosition(pos);
 
 	window_->draw(table_sprite_);
 
@@ -124,17 +137,52 @@ void Ui::PaintTable(){
 
 	backside_.setPosition(discard_pos_);
 	window_->draw(backside_);
+
+	if(scroll_on_){
+		window_->draw(rect);
+	}
 }
+
+
+void Ui::ScrollAbilityOff(){
+	scroll_on_ = false;
+}
+
+
+void Ui::ScrollAbilityOn(std::vector<Card*>& cards){
+
+	static sf::Vector2i size = {3 * CARD_X + 3 * DX, CARD_Y + DY / 2};
+	static sf::Vector2f pos = {deck_pos_.x - size.x, deck_pos_.y};
+
+	Card::CardType t;
+	int p;
+
+	int count = 0;
+
+	for(auto& c: cards){
+		assert(c);
+		t = c->type_;
+		p = (t == Card::Mermaid) ? c->points_ - 4 : c->points_ - 2;
+		sprites_.at(t).at(p).setPosition({pos.x + DX / 2 + (CARD_X + DX) * count, pos.y});
+		c->pos_ = {pos.x + DX / 2 + (CARD_X + DX) * count, pos.y};
+		count++;
+	}
+
+	scroll_on_ = true;
+}
+
 
 void Ui::BeginPaint(){
 
 	window_->clear();
 }
 
+
 void Ui::EndPaint(){
 
 	window_->display();
 }
+
 
 void Ui::SetCardForPlayer(int n, const std::vector<Card*>& cards){
 	assert(n > 0 && n < 3);
