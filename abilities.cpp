@@ -19,6 +19,10 @@ Card* Gameboard::ChestAbility(){
 	return nullptr;
 }
 
+Card* Gameboard::MermaidAbility(){
+	return nullptr;
+}
+
 Card* Gameboard::CannonAbility(){
 
 	sf::Event event;
@@ -45,9 +49,6 @@ Card* Gameboard::CannonAbility(){
 	return nullptr;
 }
 
-Card* Gameboard::MermaidAbility(){
-	return nullptr;
-}
 
 Card* Gameboard::HookAbility(){
 
@@ -112,10 +113,9 @@ Card* Gameboard::SabreAbility(){
 		if(event.type == sf::Event::MouseButtonPressed){
 	
 			Card* c = opnt->GetCard(sf::Mouse::getPosition(ui_.GetWindow()));
-			if(c && !me->HasType(c->type_)){
 
-				me->AddCard(c);
-				return nullptr;
+			if(c && !me->HasType(c->type_)){	
+				return PutCardInGameArea(c);
 			}
 		}
 	}
@@ -124,5 +124,13 @@ Card* Gameboard::SabreAbility(){
 }
 
 Card* Gameboard::KrakenAbility(){
-	return nullptr;
+
+	Card* c = PutCardInGameArea();
+	assert(c);
+	static std::vector<Card::CardType> types = {Card::Scroll, Card::Hook, Card::Sabre};
+	if(!(c->type_ == Card::Sabre || c->type_ == Card::Scroll || c->type_ == Card::Hook)){
+		draw_card_this_step_ = true;
+	}
+
+	return c;
 }

@@ -6,7 +6,8 @@
 
 Gameboard::Gameboard():
 	is_done_(false),
-	act_pl_(0){
+	act_pl_(0),
+	draw_card_this_step_(false){
 
 	Init();
 }
@@ -248,6 +249,15 @@ void Gameboard::Run(){
 			}
 
 		}
+
+		//for kraken
+		if(draw_card_this_step_){
+			draw_card_this_step_ = false;
+			new_card = PutCardInGameArea();
+			Draw();
+			continue;
+		}
+
 		//change player
 		if(taken_){
 			act_pl_ = (act_pl_ + 1) % players_.size();
@@ -282,7 +292,7 @@ void Gameboard::Run(){
 
 //
 void Gameboard::Draw(){
-	
+
 	ui_.BeginPaint();
 	assert(card_holder_.size() == 60);
 	ui_.PaintTable();

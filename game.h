@@ -79,9 +79,9 @@ private:
 	int act_pl_; // = 0;
 	bool taken_;
 
-
 	std::vector<Card> card_holder_;
 
 	Ui ui_;
 	bool is_done_;
+	bool draw_card_this_step_;
 };
