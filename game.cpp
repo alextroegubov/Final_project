@@ -19,7 +19,7 @@ void Gameboard::CreateCards(){
 
 	for(int points = 2; points <= 7; points++){
 		for(auto& t: types){
-			card_holder_.push_back(Card(t, (t == Card::Mermaid) ? points + 2 : points, Abilities[t]));
+			card_holder_.push_back(Card(t, points, Abilities[t]));
 		}		
 	}
 

@@ -4,6 +4,7 @@
 
 Ui* Ui::ui_entity = nullptr;
 
+
 Ui::~Ui(){
 
 	window_->close();
@@ -11,6 +12,7 @@ Ui::~Ui(){
 	
 	delete window_;
 }
+
 
 Ui::Ui():
 		win_sz_({1300, 768}),
@@ -89,7 +91,7 @@ void Ui::SetCardInGameArea(Card* card, int n){
 	assert(card->is_active_);
 
 	Card::CardType t = card->type_;
-	int pos = (t == Card::Mermaid) ? card->points_ - 4 : card->points_ - 2;
+	int pos = card->points_ - 2;
 
 	assert(pos < 6);
 
@@ -111,7 +113,7 @@ void Ui::PaintCards(const std::vector<Card>& cards){
 		if(card.is_active_){
 
 			t = card.type_;
-			pos = (t == Card::Mermaid) ? card.points_ - 4 : card.points_ - 2;
+			pos = card.points_ - 2;
 			assert(pos < 6);
 			window_->draw(sprites_.at(t).at(pos));
 		}
@@ -162,7 +164,7 @@ void Ui::ScrollAbilityOn(std::vector<Card*>& cards){
 	for(auto& c: cards){
 		assert(c);
 		t = c->type_;
-		p = (t == Card::Mermaid) ? c->points_ - 4 : c->points_ - 2;
+		p = c->points_ - 2;
 		sprites_.at(t).at(p).setPosition({pos.x + DX / 2 + (CARD_X + DX) * count, pos.y});
 		c->pos_ = {pos.x + DX / 2 + (CARD_X + DX) * count, pos.y};
 		count++;
@@ -202,7 +204,7 @@ void Ui::SetCardForPlayer(int n, const std::vector<Card*>& cards){
 	for(const auto& c: cards){
 		assert(c);
 		t = c->type_;
-		p = (t == Card::Mermaid) ? c->points_ - 4 : c->points_ - 2;
+		p = c->points_ - 2;
 
 		assert(p < 6);
 		//FIX: 120 = card size.x + dx

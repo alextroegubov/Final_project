@@ -7,22 +7,27 @@
 #include <iostream>
 #include <cassert>
 
+//does nothing
 Card* Gameboard::AnchorAbility(){
 	return nullptr;
 }
 
+//does nothing
 Card* Gameboard::KeyAbility(){
 	return nullptr;
 }
 
+//does nothing
 Card* Gameboard::ChestAbility(){
 	return nullptr;
 }
 
+//does nothing
 Card* Gameboard::MermaidAbility(){
 	return nullptr;
 }
 
+//does nothing
 Card* Gameboard::CannonAbility(){
 
 	sf::Event event;
@@ -190,6 +195,7 @@ Card* Gameboard::KrakenAbility(){
 	Card* c = PutCardInGameArea();
 	assert(c);
 	static std::vector<Card::CardType> types = {Card::Scroll, Card::Hook, Card::Sabre};
+
 	if(!(c->type_ == Card::Sabre || c->type_ == Card::Scroll || c->type_ == Card::Hook)){
 		draw_card_this_step_ = true;
 	}
