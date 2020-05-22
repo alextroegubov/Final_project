@@ -3,7 +3,9 @@
 #include "algorithm"
 #include <cassert>
 
-Player::Player(){
+Player::Player(int n):
+	num_(n){
+	assert(n == 1 || n == 2);
 	cards_.resize(10);
 }
 
@@ -18,19 +20,7 @@ void Player::AddCard(Card* card){
 
 	std::sort(cards_[card->type_].begin(), cards_[card->type_].end());
 
-	//do smth with borders and card position
-//	sf::Vector2f pos = {50 /*+  card->size_.x / 2*/, 768 - 300 /*+ card->size_.y / 2*/}; 
-
-//	int vert_offset = 0;
-
-	Ui::Get()->SetCardForPlayer(0, cards_[card->type_]);
-
-/*	for(auto& item: cards_[card->type_]){
-		assert(item);
-		item->pos_ = {pos.x + 120 * (card->type_), pos.y + vert_offset};
-		item->sprite_.setPosition(item->pos_.x, item->pos_.y);
-//		vert_offset += 20; 
-	}*/
+	Ui::Get()->SetCardForPlayer(num_, cards_[card->type_]);
 }
 
 void Player::TakeCards(std::vector<Card*> cards){
@@ -50,11 +40,11 @@ bool Player::HasCards(){
 }
 
 
-Card* Player::GetCard(sf::Vector2i ms_p){
+Card* Player::GetCard(sf::Vector2i ms_pos){
 
 	for(auto& v: cards_){
 		
-		if(v.size() != 0 && v.back()->IsClicked(ms_p.x, ms_p.y)){
+		if(v.size() != 0 && v.back()->IsClicked(ms_pos.x, ms_pos.y)){
 			Card* to_return = v.back();
 			v.pop_back();
 			return to_return;

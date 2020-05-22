@@ -132,9 +132,16 @@ void Ui::EndPaint(){
 }
 
 void Ui::SetCardForPlayer(int n, const std::vector<Card*>& cards){
+	assert(n > 0 && n < 3);
 
 	int v_offset = 0;
-	sf::Vector2f pos = {50, 768 - 300};
+
+	sf::Vector2f pos;
+
+	if(n == 1)
+		pos = {50, 768 - 300};
+	else
+		pos = {50, 30};
 
 	Card::CardType t;
 	int p;
@@ -145,8 +152,9 @@ void Ui::SetCardForPlayer(int n, const std::vector<Card*>& cards){
 		p = (t == Card::Mermaid) ? c->points_ - 4 : c->points_ - 2;
 
 		assert(p < 6);
-		sprites_.at(t).at(p).setPosition({pos.x + 120 * (t), pos.y + v_offset});
-		c->pos_ = {pos.x + 120 * (t), pos.y + v_offset};
+		//FIX: 120 = card size.x + dx
+		sprites_.at(t).at(p).setPosition({pos.x + 120 * t, pos.y + v_offset});
+		c->pos_ = {pos.x + 120 * t, pos.y + v_offset};
 
 		v_offset += 20;
 	}

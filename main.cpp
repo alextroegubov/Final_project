@@ -5,9 +5,13 @@
 
 int main(){
 	Gameboard game;
-	Player p1, p2;
+	Player p1(1);
+	Player p2(2);
+
 	game.ShuffleDeck();
 	game.AddPlayer(&p1);
+	game.AddPlayer(&p2);
+	
 	game.Run();
 	
 	std::this_thread::sleep_for(std::chrono::seconds(3));

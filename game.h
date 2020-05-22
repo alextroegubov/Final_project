@@ -77,6 +77,7 @@ private:
 
 	std::vector<Player*> players_;
 	int act_pl_; // = 0;
+	bool taken_;
 
 
 	std::vector<Card> card_holder_;

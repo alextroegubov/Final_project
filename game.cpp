@@ -133,6 +133,7 @@ void Gameboard::TakeGameArea(){
 	players_.at(act_pl_)->TakeCards(std::move(to_take));
 
 	game_area_.clear();
+	taken_ = true;
 }
 
 //
@@ -144,6 +145,7 @@ void Gameboard::DiscardGameArea(){
 	}
 
 	game_area_.clear();
+	taken_ = true;
 }
 
 
@@ -245,6 +247,11 @@ void Gameboard::Run(){
 				continue;
 			}
 
+		}
+		//change player
+		if(taken_){
+			act_pl_ = (act_pl_ + 1) % players_.size();
+			taken_ = false;
 		}
 
 		sf::Event event;

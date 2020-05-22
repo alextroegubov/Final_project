@@ -20,6 +20,27 @@ Card* Gameboard::ChestAbility(){
 }
 
 Card* Gameboard::CannonAbility(){
+	sf::Event event;
+	std::cout << "processing Cannon\n";
+
+	int pl = (act_pl_ + 1) % 2;
+
+	if(!players_[pl]->HasCards())
+		return nullptr;
+	
+	while(true){
+		ui_.GetWindow().waitEvent(event);
+		
+		if(event.type == sf::Event::MouseButtonPressed){
+			
+			Card* c = players_[pl]->GetCard(sf::Mouse::getPosition(ui_.GetWindow()));
+			if(c){
+				DiscardCard(c);
+				return nullptr;
+			}
+		}
+		
+	}
 	return nullptr;
 }
 

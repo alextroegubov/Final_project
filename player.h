@@ -5,7 +5,7 @@
 
 class Player{
 public:
-	Player();
+	Player(int n);
 	int CalculateScore();
 
 	void AddCard(Card* card);
@@ -18,4 +18,5 @@ public:
 
 private:
 	std::vector<std::vector<Card*>> cards_;
+	int num_;
 };
