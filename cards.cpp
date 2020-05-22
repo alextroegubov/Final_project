@@ -1,36 +1,4 @@
 #include "cards.h"
-
-void CannonAbility(){
-
-}
-void AnchorAbility(){
-	return;
-}
-void HookAbility(){
-
-}
-void KeyAbility(){
-	return;
-}
-void ChestAbility(){
-	return;
-}
-void ScrollAbility(){
-
-}
-void CrystalBallAbility(){
-
-}
-void SabreAbility(){
-
-}
-void MermaidAbility(){
-	return;
-}
-void KrakenAbility(){
-
-}
-
 Card::Card(CardType t, int points, std::function<void(void)> ability):
 //		front_side_up_(false),
 		type_(t),
@@ -46,4 +14,11 @@ bool Card::operator<(const Card& c){
 		return type_ < c.type_;
 	else
 		return points_ < c.points_;
+}
+
+
+bool Card::IsClicked(int x, int y){
+
+	return  (pos_.x <= x) && (x <= pos_.x + size_.x) &&
+			(pos_.y <= y) && (y <= pos_.y + size_.y);
 }

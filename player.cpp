@@ -38,3 +38,28 @@ void Player::TakeCards(std::vector<Card*> cards){
 	for(auto& c: cards)
 		AddCard(c);
 }
+
+
+bool Player::HasCards(){
+
+	for(const auto& v: cards_)
+		if(v.size() != 0)
+			return true;
+
+	return false;
+}
+
+
+Card* Player::GetCard(sf::Vector2i ms_p){
+
+	for(auto& v: cards_){
+		
+		if(v.size() != 0 && v.back()->IsClicked(ms_p.x, ms_p.y)){
+			Card* to_return = v.back();
+			v.pop_back();
+			return to_return;
+		}
+	}
+
+	return nullptr;
+}

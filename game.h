@@ -6,16 +6,12 @@
 #include "player.h"
 #include "texture_manager.hpp"
 #include "ui.h"
-/*
-#define DX 20
-#define DY 20
-#define CARD_X 90
-#define CARD_Y 140
-#define BORDER 25
-*/
 
 class Gameboard{
 public:
+
+	std::vector<std::function<Card*(void)>> Abilities;
+
 	Gameboard(Gameboard&) = delete;
 	Gameboard& operator=(Gameboard&) = delete;
 
@@ -32,6 +28,8 @@ public:
 	void TakeGameArea();
 	//
 	Card* PutCardInGameArea();
+	//
+	Card* PutCardInGameArea(Card* card);
 	//
 	void ShuffleDeck();
 	//
@@ -52,7 +50,7 @@ public:
 	void Draw();
 
 private:
-	void ProcessCard(Card* card);
+	Card* ProcessCard(Card* card);
 	bool CheckGameArea(Card* card);
 
 	void Init();
@@ -60,6 +58,17 @@ private:
 	void CreateWindow();
 	//FIXME: add specific sizes of sprites !?!?!?!?
 	void CreateCards();
+
+	Card* CannonAbility();
+	Card* AnchorAbility();
+	Card* HookAbility();
+	Card* KeyAbility();
+	Card* ChestAbility();
+	Card* ScrollAbility();
+	Card* CrystalBallAbility();
+	Card* SabreAbility();
+	Card* MermaidAbility();
+	Card* KrakenAbility();
 
 private:
 	std::vector<Card*> discard_;
@@ -74,30 +83,4 @@ private:
 
 	Ui ui_;
 	bool is_done_;
-};
-
-
-void CannonAbility();
-void AnchorAbility();
-void HookAbility();
-void KeyAbility();
-void ChestAbility();
-void ScrollAbility();
-void CrystalBallAbility();
-void SabreAbility();
-void MermaidAbility();
-void KrakenAbility();
-
-std::vector<std::function<void(void)>> Abilities = 
-{
-	CannonAbility,
-	AnchorAbility,
-	HookAbility,
-	KeyAbility,
-	ChestAbility,
-	ScrollAbility,
-	CrystalBallAbility,
-	SabreAbility,
-	KrakenAbility,
-	MermaidAbility
 };

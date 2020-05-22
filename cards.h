@@ -20,11 +20,9 @@ public:
 
 	Card(CardType t, int points, std::function<void(void)> ability);
 
-	void ApplyAbility(){ ability_();}
-
 	void Draw();
 
-	bool IsClicked(int x, int y); 
+	bool IsClicked(int x, int y);
 
 //	void Flip(){ front_side_up_ = !front_side_up_;}
 

@@ -30,14 +30,28 @@ void Gameboard::CreateCards(){
 	for(size_t i = 0; i < deck_.size(); i++){
 		deck_.at(i) = &(card_holder_.at(i));
 		assert(deck_.at(i));
+		deck_.at(i)->size_ = {CARD_X, CARD_Y};
 	}
 	assert(deck_.size() == 60);
 }
 
 void Gameboard::Init(){
 
-	CreateCards();
+	Abilities = 
+{
+	std::bind(&Gameboard::CannonAbility, this),
+	std::bind(&Gameboard::AnchorAbility, this),
+	std::bind(&Gameboard::HookAbility, this),
+	std::bind(&Gameboard::KeyAbility, this),
+	std::bind(&Gameboard::ChestAbility, this),
+	std::bind(&Gameboard::ScrollAbility, this),
+	std::bind(&Gameboard::CrystalBallAbility, this),
+	std::bind(&Gameboard::SabreAbility, this),
+	std::bind(&Gameboard::KrakenAbility, this),
+	std::bind(&Gameboard::MermaidAbility, this)
+};
 
+	CreateCards();
 }
 
 Gameboard::~Gameboard(){
@@ -133,6 +147,19 @@ void Gameboard::DiscardGameArea(){
 }
 
 
+Card* Gameboard::PutCardInGameArea(Card* card){
+	
+	assert(card);
+
+	card->is_active_ = true;
+	ui_.SetCardInGameArea(card, game_area_.size());
+
+	game_area_.push_back(card);
+
+	return card;	
+}
+
+
 Card* Gameboard::PutCardInGameArea(){
 	
 	Card* card = DrawCardFromDeck();
@@ -186,9 +213,11 @@ void Gameboard::ShuffleDiscard(){
 	std::shuffle(discard_.begin(), discard_.end(), g);
 }
 
-void Gameboard::ProcessCard(Card* card){
 
-	return;
+Card* Gameboard::ProcessCard(Card* card){
+	assert(card);
+	return Abilities[card->type_]();
+
 }
 
 //
@@ -206,30 +235,38 @@ void Gameboard::Run(){
 
 	while(!is_done_){
 
-		if(game_area_.size() != 0){
+		if(game_area_.size() != 0 && new_card != nullptr){
 			assert(new_card);
-			CheckGameArea(new_card);
+
+			if(CheckGameArea(new_card)){
+				new_card = ProcessCard(new_card);
+				Draw();
+//				std::this_thread::sleep_for(std::chrono::milliseconds(200));
+				continue;
+			}
+
 		}
-		else
-			ProcessCard(new_card);
 
 		sf::Event event;
 
-		ui_.GetWindow().pollEvent(event);
+		while(ui_.GetWindow().pollEvent(event)){
 		
-		switch(event.type){
+			switch(event.type){
 
-			case sf::Event::Closed:
-				Finish();
-				break;
-			case sf::Event::MouseButtonPressed:
+				case sf::Event::Closed:
+					Finish();
+					break;
+				case sf::Event::MouseButtonPressed:
 
-				if(event.key.code == sf::Mouse::Left)
-					new_card = PutCardInGameArea();
-				else 
-					TakeGameArea();
-				std::this_thread::sleep_for(std::chrono::milliseconds(200));
-				break;
+					if(event.key.code == sf::Mouse::Left)
+						new_card = PutCardInGameArea();
+					else{
+						TakeGameArea();
+						new_card = nullptr;
+					}
+					std::this_thread::sleep_for(std::chrono::milliseconds(200));
+					break;
+			}
 		}
 
 		Draw();

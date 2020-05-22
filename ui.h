@@ -32,7 +32,7 @@ public:
 
 	void PainterDeck();
 	sf::RenderWindow& GetWindow(){ return *window_;}
-	void SetCardInGameArea(const Card* card, int n);
+	void SetCardInGameArea(Card* card, int n);
 	void SetCardForPlayer(int n, const std::vector<Card*>&);
 
 private:

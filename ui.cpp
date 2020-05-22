@@ -62,7 +62,7 @@ void Ui::CreateSprites(){
 		}
 	}
 
-	printf("Card creation - ok!\n");
+	printf("Sprites creation - ok!\n");
 	fflush(stdout);
 
 	table_sprite_.setTexture(t_manager_.Get(TextureManager::Table));
@@ -74,7 +74,7 @@ void Ui::CreateSprites(){
 }
 
 
-void Ui::SetCardInGameArea(const Card* card, int n){
+void Ui::SetCardInGameArea(Card* card, int n){
 	assert(card);
 	assert(card->is_active_);
 
@@ -85,6 +85,7 @@ void Ui::SetCardInGameArea(const Card* card, int n){
 
 	sprites_.at(t).at(pos).setPosition(	BORDER + (DX + CARD_X) * n,  //?? n - 1 
 										win_sz_.y / 2 - CARD_Y / 2);
+	card->pos_ = {BORDER + (DX + CARD_X) * n,  win_sz_.y / 2 - CARD_Y / 2};
 
 	printf("game area - ok!\n");
 }
@@ -145,6 +146,7 @@ void Ui::SetCardForPlayer(int n, const std::vector<Card*>& cards){
 
 		assert(p < 6);
 		sprites_.at(t).at(p).setPosition({pos.x + 120 * (t), pos.y + v_offset});
+		c->pos_ = {pos.x + 120 * (t), pos.y + v_offset};
 
 		v_offset += 20;
 	}
