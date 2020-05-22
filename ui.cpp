@@ -23,6 +23,11 @@ Ui::Ui():
 		CreateWindow();
 		CreateSprites();
 
+		if (!music_.openFromFile("Sound/Music.ogg"))
+			assert("music");
+
+		music_.play();
+
 		ui_entity = this;
 
 }

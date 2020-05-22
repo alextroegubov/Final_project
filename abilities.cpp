@@ -80,7 +80,27 @@ Card* Gameboard::ScrollAbility(){
 }
 
 Card* Gameboard::CrystalBallAbility(){
-	return nullptr;
+	
+	sf::Event event;
+	std::cout << "processing CrystallBall\n";
+
+	if(deck_.size() == 0)
+		return nullptr;
+	
+	deck_.at(deck_.size() - 1)->is_active_ = true;
+	
+	Draw();
+
+	while(true){
+
+		ui_.GetWindow().waitEvent(event);
+
+		if(event.type == sf::Event::MouseButtonPressed){
+
+			deck_.at(deck_.size() - 1)->is_active_ = false;
+			return nullptr;
+		}
+	}
 }
 
 Card* Gameboard::SabreAbility(){

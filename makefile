@@ -1,7 +1,7 @@
 CXX = g++
 PROG = main
 CXXFLAGS += -Wall
-CXXFLAGS += -lsfml-graphics -lsfml-window -lsfml-system
+CXXFLAGS += -lsfml-graphics -lsfml-window -lsfml-system -lsfml-audio
 
 PROG_OBJ = main.o game.o player.o cards.o texture_manager.o ui.o abilities.o
 PROG_LIB = game.h player.h cards.h texture_manager.hpp ui.h

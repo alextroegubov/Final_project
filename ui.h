@@ -2,6 +2,7 @@
 
 #include <vector>
 #include <SFML/Graphics.hpp>
+#include <SFML/Audio.hpp>
 #include "cards.h"
 #include "texture_manager.hpp"
 
@@ -51,4 +52,5 @@ private:
 
 	sf::Vector2f discard_pos_;
 	sf::Vector2f deck_pos_;
+	sf::Music music_;
 };
