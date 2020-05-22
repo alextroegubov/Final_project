@@ -282,10 +282,7 @@ void Gameboard::Run(){
 
 //
 void Gameboard::Draw(){
-
-//	printf("deck_pos = (%f,%f)\n", deck_pos.x, deck_pos.y);
-//	printf("window size = (%lu, %lu)\n", window_->getSize().x,
-//										 window_->getSize().y);
+	
 	ui_.BeginPaint();
 	assert(card_holder_.size() == 60);
 	ui_.PaintTable();

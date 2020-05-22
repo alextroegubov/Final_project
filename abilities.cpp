@@ -20,6 +20,7 @@ Card* Gameboard::ChestAbility(){
 }
 
 Card* Gameboard::CannonAbility(){
+
 	sf::Event event;
 	std::cout << "processing Cannon\n";
 
@@ -82,6 +83,43 @@ Card* Gameboard::CrystalBallAbility(){
 }
 
 Card* Gameboard::SabreAbility(){
+	
+	sf::Event event;
+	std::cout << "processing Sabre\n";
+
+	Player* me = players_[act_pl_]; 
+	Player* opnt = players_[(act_pl_ + 1) % 2];
+
+	if(!opnt->HasCards())
+		return nullptr;
+
+	bool has_smth_to_choose = false;
+
+	for(int i = 0; i < 10; i++){
+
+		if(!opnt->GetCards().at(i).empty() && me->GetCards()[i].empty())
+			has_smth_to_choose = true;
+	}
+
+	if(!has_smth_to_choose)
+		return nullptr;
+
+	while(true){
+
+		ui_.GetWindow().waitEvent(event);
+
+		//rewrite with &&
+		if(event.type == sf::Event::MouseButtonPressed){
+	
+			Card* c = opnt->GetCard(sf::Mouse::getPosition(ui_.GetWindow()));
+			if(c && !me->HasType(c->type_)){
+
+				me->AddCard(c);
+				return nullptr;
+			}
+		}
+	}
+
 	return nullptr;
 }
 

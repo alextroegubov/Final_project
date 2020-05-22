@@ -15,7 +15,9 @@ int Player::CalculateScore(){
 
 void Player::AddCard(Card* card){
 	assert(card);
-
+	
+	card->is_active_ = true;
+	
 	cards_[card->type_].push_back(card);
 
 	std::sort(cards_[card->type_].begin(), cards_[card->type_].end());
@@ -52,4 +54,13 @@ Card* Player::GetCard(sf::Vector2i ms_pos){
 	}
 
 	return nullptr;
+}
+
+
+bool Player::HasType(Card::CardType t){
+
+	if(cards_.at(t).empty())
+		return false;
+	
+	return true;
 }
