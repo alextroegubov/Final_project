@@ -86,6 +86,8 @@ Card* Gameboard::ScrollAbility(){
 	std::vector<Card*> cards;
 	Card* c = nullptr;
 
+	ShuffleDiscard();
+
 	while(cards.size() < 3 && !discard_.empty()){
 
 		c = DrawCardFromDiscard();
@@ -111,9 +113,10 @@ Card* Gameboard::ScrollAbility(){
 				
 				if(c->IsClicked(sf::Mouse::getPosition(ui_.GetWindow()))){
 
-					for(auto& cc: cards)
-						DiscardCard(cc);
-
+					for(auto& cc: cards){
+						if(c != cc)						
+							DiscardCard(cc);
+					}
 					ui_.ScrollAbilityOff();
 
 					return PutCardInGameArea(c);			
