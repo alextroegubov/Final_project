@@ -42,7 +42,7 @@ Ui::Ui():
 bool Ui::IsDeckClicked(sf::Vector2i ms_pos){
 
 	return 	(deck_pos_.x <= ms_pos.x) && (ms_pos.x <= deck_pos_.x + CARD_X + DX) &&
-			(deck_pos_.y - DY <= ms_pos.y) && (ms_pos.y <= deck_pos_.y + CARD_Y);
+			((deck_pos_.y) <= ms_pos.y) && (ms_pos.y <= deck_pos_.y + CARD_Y + DY);
 }
 
 void Ui::PlaySound(Card::CardType t){
@@ -63,8 +63,7 @@ void Ui::CreateSounds(){
 		sounds_.at(t).setBuffer(s_manager_.Get(t));	
 	}
 
-	printf("Sprites creation - ok!\n");
-	fflush(stdout);
+	sounds_.at(Card::Mermaid).setVolume(50.f);
 }
 
 
@@ -103,9 +102,6 @@ void Ui::CreateSprites(){
 			spr.setPosition(deck_pos_);
 		}
 	}
-
-	printf("Sprites creation - ok!\n");
-	fflush(stdout);
 
 	table_sprite_.setTexture(t_manager_.Get(TextureManager::Table));
 	table_sprite_.setTextureRect(sf::IntRect({0,0}, win_sz_));
@@ -153,7 +149,6 @@ void Ui::PaintCards(const std::vector<Card>& cards){
 			assert(pos < 6);
 			window_->draw(sprites_.at(t).at(pos));
 		}
-
 	}
 }
 

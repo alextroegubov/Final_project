@@ -170,7 +170,7 @@ Card* Gameboard::SabreAbility(){
 
 	for(int i = 0; i < 10; i++){
 
-		if(!opnt->GetCards().at(i).empty() && me->GetCards()[i].empty()){
+		if(!opnt->GetCards().at(i).empty() && me->GetCards().at(i).empty()){
 			has_smth_to_choose = true;
 		}
 	}
@@ -186,11 +186,11 @@ Card* Gameboard::SabreAbility(){
 
 		if(event.type == sf::Event::MouseButtonPressed){
 	
-			Card* c = opnt->GetCard(sf::Mouse::getPosition(ui_.GetWindow()));
+			const Card* c = opnt->CheckCard(sf::Mouse::getPosition(ui_.GetWindow()));//opnt->GetCard(sf::Mouse::getPosition(ui_.GetWindow()));
 
 			if(c && !me->HasType(c->type_)){
 				ui_.PlaySound(Card::Sabre);
-				return PutCardInGameArea(c);
+				return PutCardInGameArea(opnt->GetCard(sf::Mouse::getPosition(ui_.GetWindow())));
 			}
 		}
 	}

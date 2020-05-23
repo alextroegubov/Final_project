@@ -43,6 +43,16 @@ bool Player::HasCards(){
 	return false;
 }
 
+const Card* Player::CheckCard(sf::Vector2i ms_pos){
+	
+	for(auto& v: cards_){
+		
+		if(v.size() != 0 && v.back()->IsClicked(ms_pos.x, ms_pos.y))
+			return v.back();
+	}
+
+	return nullptr;
+}
 
 Card* Player::GetCard(sf::Vector2i ms_pos){
 

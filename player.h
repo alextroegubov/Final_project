@@ -15,6 +15,7 @@ public:
 	void TakeCards(std::vector<Card*>);
 	//only top cards
 	Card* GetCard(sf::Vector2i ms_p);
+	const Card* CheckCard(sf::Vector2i ms_pos);
 	//
 	const std::vector<std::vector<Card*>>& GetCards(){ return cards_;}
 
