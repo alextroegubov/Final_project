@@ -3,8 +3,8 @@ PROG = main
 CXXFLAGS += -Wall
 CXXFLAGS += -lsfml-graphics -lsfml-window -lsfml-system -lsfml-audio
 
-PROG_OBJ = main.o game.o player.o cards.o texture_manager.o ui.o abilities.o
-PROG_LIB = game.h player.h cards.h texture_manager.hpp ui.h
+PROG_OBJ = main.o game.o player.o cards.o texture_manager.o ui.o abilities.o sound_manager.o
+PROG_LIB = game.h player.h cards.h texture_manager.hpp ui.h sound_manager.hpp
 
 #PROG_CPP = .cpp
 

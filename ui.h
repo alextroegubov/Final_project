@@ -5,6 +5,7 @@
 #include <SFML/Audio.hpp>
 #include "cards.h"
 #include "texture_manager.hpp"
+#include "sound_manager.hpp"
 
 const int DX  = 20;
 const int DY  = 20;
@@ -40,10 +41,13 @@ public:
 	sf::RenderWindow& GetWindow(){ return *window_;}
 	void SetCardInGameArea(Card* card, int n);
 	void SetCardForPlayer(int n, const std::vector<Card*>&);
+	void PlaySound(Card::CardType t);
 
 private:
 	void CreateSprites();
 	void CreateWindow();
+	void CreateSounds();
+	void LoadSounds();
 
 private:
 	sf::RenderWindow* window_;
@@ -59,5 +63,8 @@ private:
 
 	sf::Vector2f discard_pos_;
 	sf::Vector2f deck_pos_;
+
 	sf::Music music_;
+	std::vector<sf::Sound> sounds_;
+	SoundManager s_manager_;
 };

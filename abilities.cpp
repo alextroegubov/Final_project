@@ -9,21 +9,25 @@
 
 //does nothing
 Card* Gameboard::AnchorAbility(){
+	ui_.PlaySound(Card::Anchor);
 	return nullptr;
 }
 
 //does nothing
 Card* Gameboard::KeyAbility(){
+	ui_.PlaySound(Card::Key);
 	return nullptr;
 }
 
 //does nothing
 Card* Gameboard::ChestAbility(){
+	ui_.PlaySound(Card::Chest);
 	return nullptr;
 }
 
 //does nothing
 Card* Gameboard::MermaidAbility(){
+	ui_.PlaySound(Card::Mermaid);
 	return nullptr;
 }
 
@@ -47,7 +51,7 @@ Card* Gameboard::CannonAbility(){
 			Card* c = opnt->GetCard(sf::Mouse::getPosition(ui_.GetWindow()));
 
 			if(c != nullptr){
-
+				ui_.PlaySound(Card::Cannon);
 				DiscardCard(c);
 				return nullptr;
 			}
@@ -99,6 +103,8 @@ Card* Gameboard::ScrollAbility(){
 
 	ui_.ScrollAbilityOn(cards);
 
+	ui_.PlaySound(Card::Scroll);
+
 	Draw();
 
 	sf::Event event;
@@ -133,6 +139,7 @@ Card* Gameboard::CrystalBallAbility(){
 		return nullptr;
 	
 	deck_.at(deck_.size() - 1)->is_active_ = true;
+	ui_.PlaySound(Card::CrystalBall);
 	
 	Draw();
 
@@ -181,7 +188,8 @@ Card* Gameboard::SabreAbility(){
 	
 			Card* c = opnt->GetCard(sf::Mouse::getPosition(ui_.GetWindow()));
 
-			if(c && !me->HasType(c->type_)){	
+			if(c && !me->HasType(c->type_)){
+				ui_.PlaySound(Card::Sabre);
 				return PutCardInGameArea(c);
 			}
 		}
@@ -189,7 +197,8 @@ Card* Gameboard::SabreAbility(){
 }
 
 Card* Gameboard::KrakenAbility(){
-
+	
+	ui_.PlaySound(Card::Kraken);
 	Card* c = PutCardInGameArea();
 	//??empty deck?
 	assert(c);

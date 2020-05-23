@@ -19,22 +19,46 @@ Ui::Ui():
 		is_done_(false),
 		scroll_on_(false){
 		
-		discard_pos_ = 	{(float)win_sz_.x - CARD_X - BORDER, 
-						 (float)win_sz_.y / 2 - CARD_Y / 2};
+	discard_pos_ = 	{(float)win_sz_.x - CARD_X - BORDER, 
+					 (float)win_sz_.y / 2 - CARD_Y / 2};
 		
-		deck_pos_ = {discard_pos_.x - (CARD_X + DX),
-					discard_pos_.y};
+	deck_pos_ = {discard_pos_.x - (CARD_X + DX),
+				discard_pos_.y};
 
-		CreateWindow();
-		CreateSprites();
+	CreateWindow();
+	CreateSprites();
+	CreateSounds();
 
-		if (!music_.openFromFile("Sound/Music_game.wav"))
-			assert("music");
+	if (!music_.openFromFile("sound/Music_game.wav"))
+		assert("music");
 
-		music_.setLoop(true);
-		music_.play();
+	music_.setLoop(true);
+	music_.play();
 
-		ui_entity = this;
+	ui_entity = this;
+}
+
+
+void Ui::PlaySound(Card::CardType t){
+
+	sounds_.at(t).play();
+
+}
+
+void Ui::CreateSounds(){
+
+	s_manager_.LoadAll();
+
+	std::vector<Card::CardType> types = {Card::Cannon, Card::Anchor, Card::Hook, Card::Key, Card::Chest, 
+										 Card::Scroll, Card::CrystalBall, Card::Sabre, Card::Kraken, Card::Mermaid};
+	sounds_.resize(10);
+
+	for(auto& t: types){
+		sounds_.at(t).setBuffer(s_manager_.Get(t));	
+	}
+
+	printf("Sprites creation - ok!\n");
+	fflush(stdout);
 }
 
 
