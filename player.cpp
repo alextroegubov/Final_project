@@ -3,9 +3,10 @@
 #include "algorithm"
 #include <cassert>
 
-Player::Player(int n):
-	num_(n){
-	assert(n == 1 || n == 2);
+int Player::count = 0;
+
+Player::Player(){
+	num_ = count++;
 	cards_.resize(10);
 }
 

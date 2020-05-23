@@ -5,7 +5,9 @@
 
 class Player{
 public:
-	Player(int n);
+	static int count;
+
+	Player();
 	int CalculateScore();
 
 	void AddCard(Card* card);

@@ -49,7 +49,8 @@ void TextureManager::LoadAll(){
 	Load(Table, "images/Table.png");
 	textures_[Table]->setRepeated(true);
 
-	Load(Backside, "images/Backside.png");
+	Load(Deck, "images/Deck.png");
 
-	assert(textures_.size() == 12);
+	Load(ScrollAbility, "images/ScrollAbility.png");
+
 }

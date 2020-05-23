@@ -3,11 +3,14 @@
 #include <algorithm>
 #include <random>
 #include <thread>
+#include <iostream>
+
 
 Gameboard::Gameboard():
 	is_done_(false),
 	act_pl_(0),
-	draw_card_this_step_(false){
+	draw_card_this_step_(false),
+	taken_(false){
 
 	Init();
 }
@@ -238,12 +241,14 @@ void Gameboard::Run(){
 
 	while(!is_done_){
 
+		Draw();
+
 		if(game_area_.size() != 0 && new_card != nullptr){
 			assert(new_card);
 
 			if(CheckGameArea(new_card)){
 				new_card = ProcessCard(new_card);
-				Draw();
+//				Draw();
 //				std::this_thread::sleep_for(std::chrono::milliseconds(200));
 				continue;
 			}
@@ -254,13 +259,14 @@ void Gameboard::Run(){
 		if(draw_card_this_step_){
 			draw_card_this_step_ = false;
 			new_card = PutCardInGameArea();
-			Draw();
+//			Draw();
 			continue;
 		}
 
 		//change player
 		if(taken_){
 			act_pl_ = (act_pl_ + 1) % players_.size();
+//			ui_.PaintActivePlayer(act_pl_);
 			taken_ = false;
 		}
 
@@ -286,7 +292,7 @@ void Gameboard::Run(){
 			}
 		}
 
-		Draw();
+//		Draw();
 	}
 }
 
@@ -296,6 +302,8 @@ void Gameboard::Draw(){
 	ui_.BeginPaint();
 	assert(card_holder_.size() == 60);
 	ui_.PaintTable();
+	ui_.PaintDeck(deck_.size());
+	ui_.PaintActivePlayer(act_pl_);
 	ui_.PaintCards(card_holder_);
 
 	ui_.EndPaint();

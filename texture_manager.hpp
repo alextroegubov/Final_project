@@ -9,7 +9,9 @@ class TextureManager{
 public:
 	enum Id{
 		Table = 20,
+		Deck,
 		Backside,
+		ScrollAbility
 	};
 
 	void LoadAll();

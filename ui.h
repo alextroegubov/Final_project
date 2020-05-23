@@ -27,6 +27,8 @@ public:
 
 	void PaintCards(const std::vector<Card>&);
 	void PaintTable();
+	void PaintActivePlayer(int n);
+	void PaintDeck(int n);
 	void BeginPaint();
 	void EndPaint();
 
@@ -50,8 +52,9 @@ private:
 	bool is_done_;
 	bool scroll_on_;
 
-	sf::Sprite backside_;
+	sf::Sprite deck_;
 	sf::Sprite table_sprite_;
+	sf::Sprite scroll_;
 	TextureManager t_manager_;
 
 	sf::Vector2f discard_pos_;

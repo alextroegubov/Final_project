@@ -5,8 +5,8 @@
 
 int main(){
 	Gameboard game;
-	Player p1(1);
-	Player p2(2);
+	Player p1;
+	Player p2;
 
 	game.ShuffleDeck();
 	game.AddPlayer(&p1);

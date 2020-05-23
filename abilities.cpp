@@ -27,74 +27,71 @@ Card* Gameboard::MermaidAbility(){
 	return nullptr;
 }
 
-//does nothing
+//ok
 Card* Gameboard::CannonAbility(){
 
-	sf::Event event;
-	std::cout << "processing Cannon\n";
+	Player* opnt = players_[(act_pl_ + 1) % 2];
 
-	int pl = (act_pl_ + 1) % 2;
-
-	if(!players_[pl]->HasCards())
+	if(!opnt->HasCards())
 		return nullptr;
-	
+
+	//waiting for clicking on opponent's card 
+	sf::Event event;
+
 	while(true){
+
 		ui_.GetWindow().waitEvent(event);
 		
 		if(event.type == sf::Event::MouseButtonPressed){
 			
-			Card* c = players_[pl]->GetCard(sf::Mouse::getPosition(ui_.GetWindow()));
-			if(c){
+			Card* c = opnt->GetCard(sf::Mouse::getPosition(ui_.GetWindow()));
+
+			if(c != nullptr){
+
 				DiscardCard(c);
 				return nullptr;
 			}
 		}
-		
 	}
-	return nullptr;
 }
 
-
+//ok
 Card* Gameboard::HookAbility(){
 
-	sf::Event event;
-	std::cout << "processing Hook\n";
+	Player* me = players_[act_pl_];
 
-	if(!players_[act_pl_]->HasCards())
+	if(!me->HasCards())
 		return nullptr;
+
+	sf::Event event;
 
 	while(true){
 
 		ui_.GetWindow().waitEvent(event);
 
-		//rewrite with &&
 		if(event.type == sf::Event::MouseButtonPressed){
 	
-			Card* c = players_[act_pl_]->GetCard(sf::Mouse::getPosition(ui_.GetWindow()));
+			Card* c = me->GetCard(sf::Mouse::getPosition(ui_.GetWindow()));
 	
-			if(c){
+			if(c != nullptr){
 				return PutCardInGameArea(c);
 			}
 		}
 	}
 }
 
-
+//ok
 Card* Gameboard::ScrollAbility(){
 
 	std::vector<Card*> cards;
 	Card* c = nullptr;
 
-	for(int i = 0; i < 3; i++){
+	while(cards.size() < 3 && !discard_.empty()){
 
 		c = DrawCardFromDiscard();
-
-		if(c != nullptr){
-			cards.push_back(c);
-			c->is_active_ = true;
-		}
+		cards.push_back(c);
+		c->is_active_ = true;
 	}
-
 	if(cards.empty())
 		return nullptr;
 
@@ -107,8 +104,9 @@ Card* Gameboard::ScrollAbility(){
 	while(true){
 
 		ui_.GetWindow().waitEvent(event);
-		//FIXME!!!!!!!!!
+
 		if(event.type == sf::Event::MouseButtonPressed){
+
 			for(auto& c: cards){
 				
 				if(c->IsClicked(sf::Mouse::getPosition(ui_.GetWindow()))){
@@ -123,20 +121,19 @@ Card* Gameboard::ScrollAbility(){
 			}
 		}
 	}
-	return nullptr;
 }
 
+//ok
 Card* Gameboard::CrystalBallAbility(){
 	
-	sf::Event event;
-	std::cout << "processing CrystallBall\n";
-
 	if(deck_.size() == 0)
 		return nullptr;
 	
 	deck_.at(deck_.size() - 1)->is_active_ = true;
 	
 	Draw();
+
+	sf::Event event;
 
 	while(true){
 
@@ -150,10 +147,8 @@ Card* Gameboard::CrystalBallAbility(){
 	}
 }
 
+//ok
 Card* Gameboard::SabreAbility(){
-	
-	sf::Event event;
-	std::cout << "processing Sabre\n";
 
 	Player* me = players_[act_pl_]; 
 	Player* opnt = players_[(act_pl_ + 1) % 2];
@@ -165,18 +160,20 @@ Card* Gameboard::SabreAbility(){
 
 	for(int i = 0; i < 10; i++){
 
-		if(!opnt->GetCards().at(i).empty() && me->GetCards()[i].empty())
+		if(!opnt->GetCards().at(i).empty() && me->GetCards()[i].empty()){
 			has_smth_to_choose = true;
+		}
 	}
 
 	if(!has_smth_to_choose)
 		return nullptr;
 
+	sf::Event event;
+
 	while(true){
 
 		ui_.GetWindow().waitEvent(event);
 
-		//rewrite with &&
 		if(event.type == sf::Event::MouseButtonPressed){
 	
 			Card* c = opnt->GetCard(sf::Mouse::getPosition(ui_.GetWindow()));
@@ -186,17 +183,16 @@ Card* Gameboard::SabreAbility(){
 			}
 		}
 	}
-
-	return nullptr;
 }
 
 Card* Gameboard::KrakenAbility(){
 
 	Card* c = PutCardInGameArea();
+	//??empty deck?
 	assert(c);
 	static std::vector<Card::CardType> types = {Card::Scroll, Card::Hook, Card::Sabre};
 
-	if(!(c->type_ == Card::Sabre || c->type_ == Card::Scroll || c->type_ == Card::Hook)){
+	if(!(c->type_ == Card::Sabre || c->type_ == Card::Scroll || c->type_ == Card::Hook || c->type_ == Card::Kraken)){
 		draw_card_this_step_ = true;
 	}
 

@@ -15,7 +15,7 @@ Ui::~Ui(){
 
 
 Ui::Ui():
-		win_sz_({1300, 768}),
+		win_sz_({1300, 720}),
 		is_done_(false){
 		
 		discard_pos_ = 	{(float)win_sz_.x - CARD_X - BORDER, 
@@ -27,7 +27,7 @@ Ui::Ui():
 		CreateWindow();
 		CreateSprites();
 
-		if (!music_.openFromFile("Sound/Music.ogg"))
+		if (!music_.openFromFile("Sound/Music_game.wav"))
 			assert("music");
 
 		music_.setLoop(true);
@@ -80,9 +80,16 @@ void Ui::CreateSprites(){
 	table_sprite_.setTexture(t_manager_.Get(TextureManager::Table));
 	table_sprite_.setTextureRect(sf::IntRect({0,0}, win_sz_));
 
-	backside_.setTexture(t_manager_.Get(TextureManager::Backside));
-	backside_.setTextureRect(sf::IntRect({0, 0}, size));
-	backside_.scale((float)CARD_X / size.x, (float)CARD_Y / size.y);
+	deck_.setTexture(t_manager_.Get(TextureManager::Deck));
+//	deck_.setTextureRect(sf::IntRect({0, 0}, size));
+	deck_.scale((float)CARD_X / 529.0f * 1.2, (float)CARD_Y / 709.0f * 1.2);
+
+	scroll_.setTexture(t_manager_.Get(TextureManager::ScrollAbility));
+	scroll_.setTextureRect(sf::IntRect({0, 0}, {512, 383}));
+
+	scroll_.scale((3 * CARD_X + 3 * DX) / 512.0f, (CARD_Y + 2 * DY) / 383.0f);
+
+	scroll_.setPosition({deck_pos_.x - 3 * CARD_X - 3 * DX, deck_pos_.y});
 }
 
 
@@ -122,26 +129,57 @@ void Ui::PaintCards(const std::vector<Card>& cards){
 }
 
 
+void Ui::PaintActivePlayer(int n){
+	
+	static sf::CircleShape marker(10.0f);
+
+	marker.setFillColor(sf::Color::Red);
+
+	sf::Vector2f pos;
+
+	if(n == 1)
+		pos = {BORDER, CARD_Y / 2};
+	else if(n == 0)
+		pos = {BORDER, win_sz_.y - CARD_Y};
+	else
+		assert(n == 0 || n == 1);
+
+	marker.setPosition(pos);
+
+	window_->draw(marker);
+}
+
+
+void Ui::PaintDeck(int n){
+
+	if(n == 0)
+		return;
+
+	sf::Vector2i pos_in_tex = {(n > 5)? 4 * 529 : (n - 1) * 529, 0};
+
+	deck_.setTextureRect(sf::IntRect(pos_in_tex, {529, 709}));
+	deck_.setPosition(deck_pos_);
+	window_->draw(deck_);
+}
+
 void Ui::PaintTable(){
 
-	static sf::Vector2i size = {3 * CARD_X + 3 * DX, CARD_Y + DY / 2};
-	static sf::Vector2f pos = {deck_pos_.x - size.x, deck_pos_.y};
+//	static sf::Vector2i size = {3 * CARD_X + 3 * DX, CARD_Y + DY / 2};
+	//static sf::Vector2f pos = {deck_pos_.x - 3 * CARD_X - 3 * DX, deck_pos_.y};
+	//scroll_.setPosition(pos);
+//	static sf::RectangleShape rect({size.x, size.y});
 
-	static sf::RectangleShape rect({size.x, size.y});
-
-	rect.setFillColor(sf::Color::Black);
-	rect.setPosition(pos);
+//	rect.setFillColor(sf::Color::Black);
+//	rect.setPosition(pos);
 
 	window_->draw(table_sprite_);
 
-	backside_.setPosition(deck_pos_);
-	window_->draw(backside_);
-
-	backside_.setPosition(discard_pos_);
-	window_->draw(backside_);
+	deck_.setPosition(discard_pos_);
+	deck_.setTextureRect(sf::IntRect({0, 0}, {529, 709}));
+	window_->draw(deck_);
 
 	if(scroll_on_){
-		window_->draw(rect);
+		window_->draw(scroll_);
 	}
 }
 
@@ -165,8 +203,8 @@ void Ui::ScrollAbilityOn(std::vector<Card*>& cards){
 		assert(c);
 		t = c->type_;
 		p = c->points_ - 2;
-		sprites_.at(t).at(p).setPosition({pos.x + DX / 2 + (CARD_X + DX) * count, pos.y});
-		c->pos_ = {pos.x + DX / 2 + (CARD_X + DX) * count, pos.y};
+		sprites_.at(t).at(p).setPosition({pos.x + DX + (CARD_X + DX / 4) * count, pos.y + DY});
+		c->pos_ = {pos.x + DX + (CARD_X + DX / 4) * count, pos.y + DY};
 		count++;
 	}
 
@@ -187,16 +225,16 @@ void Ui::EndPaint(){
 
 
 void Ui::SetCardForPlayer(int n, const std::vector<Card*>& cards){
-	assert(n > 0 && n < 3);
+	assert(n == 0 || n == 1);
 
 	int v_offset = 0;
 
 	sf::Vector2f pos;
 
-	if(n == 1)
-		pos = {50, 768 - 300};
+	if(n == 0)
+		pos = {2 * BORDER, 768 - 2 * CARD_Y };
 	else
-		pos = {50, 30};
+		pos = {2 * BORDER, BORDER};
 
 	Card::CardType t;
 	int p;
