@@ -6,6 +6,7 @@
 int Player::count = 0;
 
 Player::Player(){
+
 	num_ = count++;
 	cards_.resize(10);
 }
@@ -19,11 +20,11 @@ void Player::AddCard(Card* card){
 	
 	card->is_active_ = true;
 	
-	cards_[card->type_].push_back(card);
+	cards_.at(card->type_).push_back(card);
 
-	std::sort(cards_[card->type_].begin(), cards_[card->type_].end());
+	std::sort(cards_.at(card->type_).begin(), cards_.at(card->type_).end());
 
-	Ui::Get()->SetCardForPlayer(num_, cards_[card->type_]);
+	Ui::Get()->SetCardForPlayer(num_, cards_.at(card->type_));
 }
 
 void Player::TakeCards(std::vector<Card*> cards){

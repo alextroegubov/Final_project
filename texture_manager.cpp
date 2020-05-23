@@ -47,10 +47,9 @@ void TextureManager::LoadAll(){
 	}
 	
 	Load(Table, "images/Table.png");
-	textures_[Table]->setRepeated(true);
+	textures_.at(Table)->setRepeated(true);
 
 	Load(Deck, "images/Deck.png");
 
 	Load(ScrollAbility, "images/ScrollAbility.png");
-
 }

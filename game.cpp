@@ -223,7 +223,6 @@ void Gameboard::ShuffleDiscard(){
 Card* Gameboard::ProcessCard(Card* card){
 	assert(card);
 	return Abilities[card->type_]();
-
 }
 
 //
@@ -242,21 +241,17 @@ void Gameboard::Run(){
 	while(!is_done_){
 
 		Draw();
-
 		if(game_area_.size() != 0 && new_card != nullptr){
 			assert(new_card);
 
 			if(CheckGameArea(new_card)){
 				new_card = ProcessCard(new_card);
-//				Draw();
-//				std::this_thread::sleep_for(std::chrono::milliseconds(200));
 				continue;
 			}
-
 		}
-
 		//for kraken
 		if(draw_card_this_step_){
+
 			draw_card_this_step_ = false;
 			new_card = PutCardInGameArea();
 //			Draw();
@@ -266,7 +261,6 @@ void Gameboard::Run(){
 		//change player
 		if(taken_){
 			act_pl_ = (act_pl_ + 1) % players_.size();
-//			ui_.PaintActivePlayer(act_pl_);
 			taken_ = false;
 		}
 
@@ -291,8 +285,6 @@ void Gameboard::Run(){
 					break;
 			}
 		}
-
-//		Draw();
 	}
 }
 

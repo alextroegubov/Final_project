@@ -16,7 +16,8 @@ Ui::~Ui(){
 
 Ui::Ui():
 		win_sz_({1300, 720}),
-		is_done_(false){
+		is_done_(false),
+		scroll_on_(false){
 		
 		discard_pos_ = 	{(float)win_sz_.x - CARD_X - BORDER, 
 						 (float)win_sz_.y / 2 - CARD_Y / 2};
@@ -34,7 +35,6 @@ Ui::Ui():
 		music_.play();
 
 		ui_entity = this;
-
 }
 
 
@@ -81,14 +81,13 @@ void Ui::CreateSprites(){
 	table_sprite_.setTextureRect(sf::IntRect({0,0}, win_sz_));
 
 	deck_.setTexture(t_manager_.Get(TextureManager::Deck));
-//	deck_.setTextureRect(sf::IntRect({0, 0}, size));
 	deck_.scale((float)CARD_X / 529.0f * 1.2, (float)CARD_Y / 709.0f * 1.2);
 
 	scroll_.setTexture(t_manager_.Get(TextureManager::ScrollAbility));
 	scroll_.setTextureRect(sf::IntRect({0, 0}, {512, 383}));
 
+	//512x383 - size of ScrollAbility texture
 	scroll_.scale((3 * CARD_X + 3 * DX) / 512.0f, (CARD_Y + 2 * DY) / 383.0f);
-
 	scroll_.setPosition({deck_pos_.x - 3 * CARD_X - 3 * DX, deck_pos_.y});
 }
 
@@ -130,7 +129,7 @@ void Ui::PaintCards(const std::vector<Card>& cards){
 
 
 void Ui::PaintActivePlayer(int n){
-	
+
 	static sf::CircleShape marker(10.0f);
 
 	marker.setFillColor(sf::Color::Red);
@@ -157,20 +156,14 @@ void Ui::PaintDeck(int n){
 
 	sf::Vector2i pos_in_tex = {(n > 5)? 4 * 529 : (n - 1) * 529, 0};
 
+	//529x709 - size of one sprite in Deck.png
 	deck_.setTextureRect(sf::IntRect(pos_in_tex, {529, 709}));
 	deck_.setPosition(deck_pos_);
 	window_->draw(deck_);
 }
 
+
 void Ui::PaintTable(){
-
-//	static sf::Vector2i size = {3 * CARD_X + 3 * DX, CARD_Y + DY / 2};
-	//static sf::Vector2f pos = {deck_pos_.x - 3 * CARD_X - 3 * DX, deck_pos_.y};
-	//scroll_.setPosition(pos);
-//	static sf::RectangleShape rect({size.x, size.y});
-
-//	rect.setFillColor(sf::Color::Black);
-//	rect.setPosition(pos);
 
 	window_->draw(table_sprite_);
 
