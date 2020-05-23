@@ -39,6 +39,12 @@ Ui::Ui():
 }
 
 
+bool Ui::IsDeckClicked(sf::Vector2i ms_pos){
+
+	return 	(deck_pos_.x <= ms_pos.x) && (ms_pos.x <= deck_pos_.x + CARD_X + DX) &&
+			(deck_pos_.y - DY <= ms_pos.y) && (ms_pos.y <= deck_pos_.y + CARD_Y);
+}
+
 void Ui::PlaySound(Card::CardType t){
 
 	sounds_.at(t).play();

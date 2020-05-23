@@ -42,6 +42,7 @@ public:
 	void SetCardInGameArea(Card* card, int n);
 	void SetCardForPlayer(int n, const std::vector<Card*>&);
 	void PlaySound(Card::CardType t);
+	bool IsDeckClicked(sf::Vector2i ms_pos);
 
 private:
 	void CreateSprites();

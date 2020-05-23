@@ -274,14 +274,17 @@ void Gameboard::Run(){
 					Finish();
 					break;
 				case sf::Event::MouseButtonPressed:
+					
+					if(ui_.IsDeckClicked(sf::Mouse::getPosition())){
 
-					if(event.key.code == sf::Mouse::Left)
-						new_card = PutCardInGameArea();
-					else{
-						TakeGameArea();
-						new_card = nullptr;
+						if(event.key.code == sf::Mouse::Left)
+							new_card = PutCardInGameArea();
+						else{
+							TakeGameArea();
+							new_card = nullptr;
+						}
+						std::this_thread::sleep_for(std::chrono::milliseconds(200));
 					}
-					std::this_thread::sleep_for(std::chrono::milliseconds(200));
 					break;
 			}
 		}
