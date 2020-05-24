@@ -12,8 +12,6 @@ Ui* Ui::ui_entity = nullptr;
 Ui::~Ui(){
 
 	window_->close();
-//	music_.stop();
-	
 	delete window_;
 }
 
@@ -21,7 +19,9 @@ Ui::~Ui(){
 Ui::Ui():
 		win_sz_({1300, 720}),
 		is_done_(false),
-		scroll_on_(false){
+		scroll_on_(false),
+		rules_on_(false),
+		rule_button_on_(false){
 		
 	discard_pos_ = 	{(float)win_sz_.x - CARD_X - BORDER, 
 					 (float)win_sz_.y / 2 - CARD_Y / 2};
@@ -73,6 +73,7 @@ void Ui::Start(){
 
 	table_sprite_.setTexture(t_manager_.Get(TextureManager::Table));
 	table_sprite_.setTextureRect(sf::IntRect({0,0}, win_sz_));
+	rule_button_on_ = true;
 }
 
 
@@ -94,6 +95,11 @@ bool Ui::IsPlayPressed(sf::Vector2i ms_pos){
 	return 	(win_sz_.x / 2 - sizeof("Play game") * 100 / 4 <= ms_pos.x) &&
 			(ms_pos.x <= win_sz_.x / 2 + sizeof("Play game") * 100 / 4) &&
 			(win_sz_.y / 2 - 50 <= ms_pos.y) && (ms_pos.y <= win_sz_.y / 2 + 50);
+}
+
+bool Ui::IsRuleClicked(sf::Vector2i ms_pos){
+
+	return (win_sz_.x - 100 <= ms_pos.x) && (win_sz_.y - 100 <= ms_pos.y);
 }
 
 void Ui::PlaySound(Card::CardType t){
@@ -163,6 +169,16 @@ void Ui::CreateSprites(){
 	//512x383 - size of ScrollAbility texture
 	scroll_.scale((3 * CARD_X + 3 * DX) / 512.0f, (CARD_Y + 2 * DY) / 383.0f);
 	scroll_.setPosition({deck_pos_.x - 3 * CARD_X - 3 * DX, deck_pos_.y});
+
+	rule_.setTexture(t_manager_.Get(TextureManager::Rule));
+	rule_.setOrigin(1428 / 2, 1022 / 2);
+	rule_.setScale(0.5, 0.5);
+	rule_.setPosition({win_sz_.x / 2, win_sz_.y / 2});
+
+	rule_button_.setTexture(t_manager_.Get(TextureManager::RuleButton));
+	rule_button_.setPosition({win_sz_.x - 100, win_sz_.y - 100});
+	//size 850x657
+	rule_button_.setScale(100.f / 850, 100.f / 675);
 }
 
 
@@ -198,6 +214,9 @@ void Ui::PaintCards(const std::vector<Card>& cards){
 			window_->draw(sprites_.at(t).at(pos));
 		}
 	}
+
+	if(rules_on_)
+		window_->draw(rule_);
 }
 
 
@@ -254,6 +273,10 @@ void Ui::PaintTable(){
 
 	if(scroll_on_){
 		window_->draw(scroll_);
+	}
+
+	if(rule_button_on_){
+		window_->draw(rule_button_);
 	}
 }
 

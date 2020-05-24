@@ -47,6 +47,7 @@ public:
 	void Finish();
 
 	void Exit();
+
 	//change to paint
 	void Draw();
 

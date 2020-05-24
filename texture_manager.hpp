@@ -12,7 +12,9 @@ public:
 		Deck,
 		Backside,
 		ScrollAbility,
-		Menu
+		Menu,
+		Rule,
+		RuleButton
 	};
 
 	void LoadAll();

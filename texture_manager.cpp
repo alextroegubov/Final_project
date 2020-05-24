@@ -54,4 +54,8 @@ void TextureManager::LoadAll(){
 	Load(Deck, "images/Deck.png");
 
 	Load(ScrollAbility, "images/ScrollAbility.png");
+
+	Load(Rule, "images/Rule.png");
+
+	Load(RuleButton, "images/Rule_button.png");
 }

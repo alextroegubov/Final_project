@@ -246,17 +246,15 @@ void Gameboard::DiscardCard(Card* c){
 void Gameboard::Run(){
 
 	ui_.Menu();
-
+	//processing menu
 	while(true){
 
 		sf::Event event;
-
 		ui_.GetWindow().waitEvent(event);
 		
 		if((event.type == sf::Event::MouseButtonPressed) && 
-			ui_.IsPlayPressed(sf::Mouse::getPosition(ui_.GetWindow()))){
+			ui_.IsPlayPressed(sf::Mouse::getPosition(ui_.GetWindow())))
 			break;
-		}
 	}
 
 	ui_.Start();
@@ -279,7 +277,6 @@ void Gameboard::Run(){
 
 			draw_card_this_step_ = false;
 			new_card = PutCardInGameArea();
-//			Draw();
 			continue;
 		}
 
@@ -308,7 +305,21 @@ void Gameboard::Run(){
 							TakeGameArea();
 							new_card = nullptr;
 						}
-//						std::this_thread::sleep_for(std::chrono::milliseconds(200));
+					}
+
+					if(ui_.IsRuleClicked(sf::Mouse::getPosition(ui_.GetWindow()))){
+						
+						ui_.SetRule(true);
+						Draw();
+
+						while(true){
+							ui_.GetWindow().waitEvent(event);
+
+							if(event.type == sf::Event::MouseButtonPressed){
+								ui_.SetRule(false);
+								break;
+							}
+						}
 					}
 					break;
 			}

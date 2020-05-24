@@ -30,6 +30,7 @@ public:
 
 	void PaintCards(const std::vector<Card>&);
 	void PaintTable();
+	void PaintRules();
 	void PaintActivePlayer(int n);
 	void PaintDeck(int n);
 	void PaintDiscard(int n);
@@ -39,6 +40,7 @@ public:
 	void PainterDeck();
 	void ScrollAbilityOn(std::vector<Card*>&);
 	void ScrollAbilityOff();
+	void SetRule(bool b){rules_on_ = b;}
 
 	sf::RenderWindow& GetWindow(){ return *window_;}
 	void SetCardInGameArea(Card* card, int n);
@@ -46,6 +48,7 @@ public:
 	void PlaySound(Card::CardType t);
 	bool IsDeckClicked(sf::Vector2i ms_pos);
 	bool IsPlayPressed(sf::Vector2i ms_pos);
+	bool IsRuleClicked(sf::Vector2i ms_pos);
 
 private:
 	void CreateSprites();
@@ -59,10 +62,15 @@ private:
 	sf::Vector2i win_sz_;
 	bool is_done_;
 	bool scroll_on_;
+	bool rules_on_;
+	bool rule_button_on_;
 
 	sf::Sprite deck_;
 	sf::Sprite table_sprite_;
 	sf::Sprite scroll_;
+	sf::Sprite rule_;
+	sf::Sprite rule_button_;
+
 	TextureManager t_manager_;
 
 	sf::Vector2f discard_pos_;
