@@ -3,6 +3,7 @@
 #include <vector>
 #include <SFML/Graphics.hpp>
 #include <SFML/Audio.hpp>
+#include <SFML/Graphics/Font.hpp>
 #include "cards.h"
 #include "texture_manager.hpp"
 #include "sound_manager.hpp"
@@ -23,8 +24,9 @@ public:
 	Ui& operator=(Ui& ) = delete;
 	~Ui();
 
+	void Menu();
 	void Start();
-	void Finish();
+	void Finish(int, int);
 
 	void PaintCards(const std::vector<Card>&);
 	void PaintTable();
@@ -43,6 +45,7 @@ public:
 	void SetCardForPlayer(int n, const std::vector<Card*>&);
 	void PlaySound(Card::CardType t);
 	bool IsDeckClicked(sf::Vector2i ms_pos);
+	bool IsPlayPressed(sf::Vector2i ms_pos);
 
 private:
 	void CreateSprites();

@@ -245,6 +245,22 @@ void Gameboard::DiscardCard(Card* c){
 
 void Gameboard::Run(){
 
+	ui_.Menu();
+
+	while(true){
+
+		sf::Event event;
+
+		ui_.GetWindow().waitEvent(event);
+		
+		if((event.type == sf::Event::MouseButtonPressed) && 
+			ui_.IsPlayPressed(sf::Mouse::getPosition(ui_.GetWindow()))){
+			break;
+		}
+	}
+
+	ui_.Start();
+
 	Card* new_card = nullptr;
 
 	while(!is_done_){

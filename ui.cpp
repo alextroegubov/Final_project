@@ -1,6 +1,10 @@
 #include "ui.h"
 #include <cassert>
 #include <thread>
+#include <SFML/Graphics/Font.hpp>
+#include <SFML/Graphics/Text.hpp>
+
+#include <iostream>
 
 Ui* Ui::ui_entity = nullptr;
 
@@ -8,7 +12,7 @@ Ui* Ui::ui_entity = nullptr;
 Ui::~Ui(){
 
 	window_->close();
-	music_.stop();
+//	music_.stop();
 	
 	delete window_;
 }
@@ -33,10 +37,63 @@ Ui::Ui():
 }
 
 
+void Ui::Menu(){
+
+	table_sprite_.setTexture(t_manager_.Get(TextureManager::Menu));
+	table_sprite_.setTextureRect(sf::IntRect({0,0}, win_sz_));
+
+	s_manager_.PlayMusic(SoundManager::MenuMusic);
+
+	sf::Font font;
+
+	if (!font.loadFromFile("images/arial.ttf")){
+		assert("text");
+	}
+
+	sf::Text text;
+
+	text.setString("Play game");
+	text.setFont(font);
+	text.setCharacterSize(100);
+	text.setFillColor(sf::Color::Black);
+
+	text.setPosition({win_sz_.x / 2 - sizeof("Play game") * 100 / 4 , win_sz_.y / 2 - 50});
+	
+	BeginPaint();
+	PaintTable();
+	window_->draw(text);
+	EndPaint();
+}
+
+
+void Ui::Start(){
+
+	s_manager_.StopMusic(SoundManager::MenuMusic);
+	s_manager_.PlayMusic(SoundManager::GameMusic);
+
+	table_sprite_.setTexture(t_manager_.Get(TextureManager::Table));
+	table_sprite_.setTextureRect(sf::IntRect({0,0}, win_sz_));
+}
+
+
+void Ui::Finish(int pl_score_0, int pl_score_1){
+
+
+}
+
+
 bool Ui::IsDeckClicked(sf::Vector2i ms_pos){
 
 	return 	(deck_pos_.x <= ms_pos.x) && (ms_pos.x <= deck_pos_.x + CARD_X + DX) &&
 			((deck_pos_.y) <= ms_pos.y) && (ms_pos.y <= deck_pos_.y + CARD_Y + DY);
+}
+
+
+bool Ui::IsPlayPressed(sf::Vector2i ms_pos){
+	
+	return 	(win_sz_.x / 2 - sizeof("Play game") * 100 / 4 <= ms_pos.x) &&
+			(ms_pos.x <= win_sz_.x / 2 + sizeof("Play game") * 100 / 4) &&
+			(win_sz_.y / 2 - 50 <= ms_pos.y) && (ms_pos.y <= win_sz_.y / 2 + 50);
 }
 
 void Ui::PlaySound(Card::CardType t){
@@ -96,9 +153,6 @@ void Ui::CreateSprites(){
 			spr.setPosition(deck_pos_);
 		}
 	}
-
-	table_sprite_.setTexture(t_manager_.Get(TextureManager::Table));
-	table_sprite_.setTextureRect(sf::IntRect({0,0}, win_sz_));
 
 	deck_.setTexture(t_manager_.Get(TextureManager::Deck));
 	deck_.scale((float)CARD_X / 529.0f * 1.2, (float)CARD_Y / 709.0f * 1.2);

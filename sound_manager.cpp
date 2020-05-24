@@ -27,8 +27,13 @@ void SoundManager::LoadMusic(int id, const std::string& filename){
 
 
 SoundManager::~SoundManager(){
+	
 	for(auto& item: sounds_)
 		delete item.second;
+
+	for(auto& item: music_)
+		delete item.second;
+	
 }
 
 

@@ -11,7 +11,8 @@ public:
 		Table = 20,
 		Deck,
 		Backside,
-		ScrollAbility
+		ScrollAbility,
+		Menu
 	};
 
 	void LoadAll();
