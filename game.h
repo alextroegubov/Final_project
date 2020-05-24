@@ -19,7 +19,6 @@ public:
 
 	void StartGame();
 	~Gameboard();
-
 	//
 	Card* DrawCardFromDeck();
 	//
@@ -46,6 +45,8 @@ public:
 	void Run();
 
 	void Finish();
+
+	void Exit();
 	//change to paint
 	void Draw();
 

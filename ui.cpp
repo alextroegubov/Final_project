@@ -29,12 +29,6 @@ Ui::Ui():
 	CreateSprites();
 	CreateSounds();
 
-	if (!music_.openFromFile("sound/Music_game.wav"))
-		assert("music");
-
-	music_.setLoop(true);
-	music_.play();
-
 	ui_entity = this;
 }
 
@@ -203,11 +197,7 @@ void Ui::PaintDiscard(int n){
 void Ui::PaintTable(){
 
 	window_->draw(table_sprite_);
-/*
-	deck_.setPosition(discard_pos_);
-	deck_.setTextureRect(sf::IntRect({0, 0}, {529, 709}));
-	window_->draw(deck_);
-*/
+
 	if(scroll_on_){
 		window_->draw(scroll_);
 	}

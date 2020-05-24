@@ -2,7 +2,7 @@
 #include <cassert>
 
 
-void SoundManager::Load(int id, const std::string& filename){
+void SoundManager::LoadSound(int id, const std::string& filename){
 	
 	sf::SoundBuffer* new_sound = new sf::SoundBuffer();
 	assert(new_sound);
@@ -14,9 +14,36 @@ void SoundManager::Load(int id, const std::string& filename){
 }
 
 
+void SoundManager::LoadMusic(int id, const std::string& filename){
+	
+	sf::Music* new_music = new sf::Music();
+	assert(new_music);
+
+	if(!new_music->openFromFile(filename))
+		assert("can't open from file");
+	
+	music_[id] = new_music;
+}
+
+
 SoundManager::~SoundManager(){
 	for(auto& item: sounds_)
 		delete item.second;
+}
+
+
+void SoundManager::PlayMusic(int id){
+	assert(music_.at(id));
+	
+	music_.at(id)->setLoop(true);
+	music_.at(id)->play();
+}
+
+
+void SoundManager::StopMusic(int id){
+	assert(music_.at(id));
+
+	music_.at(id)->stop();
 }
 
 
@@ -44,6 +71,9 @@ void SoundManager::LoadAll(){
 	};
 
 	for(const auto& i: my_files){
-		Load(i.first, i.second);
+		LoadSound(i.first, i.second);
 	}
+
+	LoadMusic(MenuMusic, "sound/MenuMusic.ogg");
+	LoadMusic(GameMusic, "sound/GameMusic.wav");
 }

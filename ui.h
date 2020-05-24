@@ -34,7 +34,6 @@ public:
 	void BeginPaint();
 	void EndPaint();
 
-
 	void PainterDeck();
 	void ScrollAbilityOn(std::vector<Card*>&);
 	void ScrollAbilityOff();

@@ -59,12 +59,18 @@ void Gameboard::Init(){
 }
 
 Gameboard::~Gameboard(){
-	Finish();
+	Exit();
 }
 
+void Gameboard::Exit(){
+	is_done_ = true;	
+}
+
+
 void Gameboard::Finish(){
-	is_done_ = true;
-	
+
+//	ui_.DrawFinish();
+
 }
 
 void Gameboard::AddPlayer(Player* p){
@@ -169,7 +175,10 @@ Card* Gameboard::PutCardInGameArea(Card* card){
 Card* Gameboard::PutCardInGameArea(){
 	
 	Card* card = DrawCardFromDeck();
-	assert(card);
+	if(!card){
+//		CalculateScore();
+		is_done_ = true;
+	}
 
 	card->is_active_ = true;
 	ui_.SetCardInGameArea(card, game_area_.size());
@@ -271,7 +280,7 @@ void Gameboard::Run(){
 			switch(event.type){
 
 				case sf::Event::Closed:
-					Finish();
+					Exit();
 					break;
 				case sf::Event::MouseButtonPressed:
 					
@@ -303,5 +312,4 @@ void Gameboard::Draw(){
 	ui_.PaintCards(card_holder_);
 
 	ui_.EndPaint();
-
 }
