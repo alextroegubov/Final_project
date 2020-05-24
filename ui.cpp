@@ -55,7 +55,7 @@ void Ui::Menu(){
 	text.setString("Play game");
 	text.setFont(font);
 	text.setCharacterSize(100);
-	text.setFillColor(sf::Color::Black);
+	text.setFillColor(sf::Color::White);
 
 	text.setPosition({win_sz_.x / 2 - sizeof("Play game") * 100 / 4 , win_sz_.y / 2 - 50});
 	
