@@ -30,6 +30,7 @@ public:
 	void PaintTable();
 	void PaintActivePlayer(int n);
 	void PaintDeck(int n);
+	void PaintDiscard(int n);
 	void BeginPaint();
 	void EndPaint();
 

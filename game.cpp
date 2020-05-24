@@ -298,6 +298,7 @@ void Gameboard::Draw(){
 	assert(card_holder_.size() == 60);
 	ui_.PaintTable();
 	ui_.PaintDeck(deck_.size());
+	ui_.PaintDiscard(discard_.size());
 	ui_.PaintActivePlayer(act_pl_);
 	ui_.PaintCards(card_holder_);
 

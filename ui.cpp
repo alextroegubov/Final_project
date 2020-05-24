@@ -180,7 +180,6 @@ void Ui::PaintDeck(int n){
 		return;
 
 	sf::Vector2i pos_in_tex = {(n > 5)? 4 * 529 : (n - 1) * 529, 0};
-
 	//529x709 - size of one sprite in Deck.png
 	deck_.setTextureRect(sf::IntRect(pos_in_tex, {529, 709}));
 	deck_.setPosition(deck_pos_);
@@ -188,14 +187,27 @@ void Ui::PaintDeck(int n){
 }
 
 
+void Ui::PaintDiscard(int n){
+	
+	if(n == 0)
+		return;
+
+	sf::Vector2i pos_in_tex = {(n > 5)? 4 * 529 : (n - 1) * 529, 0};
+	//529x709 - size of one sprite in Deck.png
+	deck_.setTextureRect(sf::IntRect(pos_in_tex, {529, 709}));
+	deck_.setPosition(discard_pos_);
+	window_->draw(deck_);
+}
+
+
 void Ui::PaintTable(){
 
 	window_->draw(table_sprite_);
-
+/*
 	deck_.setPosition(discard_pos_);
 	deck_.setTextureRect(sf::IntRect({0, 0}, {529, 709}));
 	window_->draw(deck_);
-
+*/
 	if(scroll_on_){
 		window_->draw(scroll_);
 	}
