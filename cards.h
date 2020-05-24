@@ -18,7 +18,7 @@ public:
 		Mermaid
 	};
 
-	Card(CardType t, int points, std::function<void(void)> ability);
+	Card(CardType t, int points, std::function<Card*(Card*)> ability);
 
 	void Draw();
 
@@ -36,7 +36,8 @@ public:
 	enum CardType type_;
 	bool is_active_;
 	int points_;
+	bool highlight_;
 	sf::Vector2i size_;
 	sf::Vector2i pos_;
-	std::function<void(void)> ability_;
+	std::function<Card*(Card*)> ability_;
 };

@@ -1,5 +1,5 @@
 #include "cards.h"
-Card::Card(CardType t, int points, std::function<void(void)> ability):
+Card::Card(CardType t, int points, std::function<Card*(Card*)> ability):
 //		front_side_up_(false),
 		type_(t),
 		is_active_(false),

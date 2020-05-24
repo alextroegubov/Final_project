@@ -203,6 +203,10 @@ void Ui::PaintCards(const std::vector<Card>& cards){
 	Card::CardType t;
 	int pos;
 
+	sf::RectangleShape rect;
+	rect.setFillColor(sf::Color::Red);
+	rect.setSize({CARD_X + 10, CARD_Y + 10});
+
 	for(const auto& card: cards){
 		assert(cards.size() == 60);
 			
@@ -211,6 +215,12 @@ void Ui::PaintCards(const std::vector<Card>& cards){
 			t = card.type_;
 			pos = card.points_ - 2;
 			assert(pos < 6);
+
+			if(card.highlight_){
+				rect.setPosition({card.pos_.x - 5, card.pos_.y - 5});
+				window_->draw(rect);
+			}
+
 			window_->draw(sprites_.at(t).at(pos));
 		}
 	}

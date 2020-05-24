@@ -10,7 +10,7 @@
 class Gameboard{
 public:
 
-	std::vector<std::function<Card*(void)>> Abilities;
+	std::vector<std::function<Card*(Card*)>> Abilities;
 
 	Gameboard(Gameboard&) = delete;
 	Gameboard& operator=(Gameboard&) = delete;
@@ -61,16 +61,16 @@ private:
 	//FIXME: add specific sizes of sprites !?!?!?!?
 	void CreateCards();
 
-	Card* CannonAbility();
-	Card* AnchorAbility();
-	Card* HookAbility();
-	Card* KeyAbility();
-	Card* ChestAbility();
-	Card* ScrollAbility();
-	Card* CrystalBallAbility();
-	Card* SabreAbility();
-	Card* MermaidAbility();
-	Card* KrakenAbility();
+	Card* CannonAbility(Card*);
+	Card* AnchorAbility(Card*);
+	Card* HookAbility(Card*);
+	Card* KeyAbility(Card*);
+	Card* ChestAbility(Card*);
+	Card* ScrollAbility(Card*);
+	Card* CrystalBallAbility(Card*);
+	Card* SabreAbility(Card*);
+	Card* MermaidAbility(Card*);
+	Card* KrakenAbility(Card*);
 
 private:
 	std::vector<Card*> discard_;

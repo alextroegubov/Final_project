@@ -4,6 +4,7 @@
 #include <random>
 #include <thread>
 #include <iostream>
+#include <functional>
 
 
 Gameboard::Gameboard():
@@ -41,18 +42,20 @@ void Gameboard::CreateCards(){
 
 void Gameboard::Init(){
 
+	using namespace std::placeholders;
+
 	Abilities = 
 {
-	std::bind(&Gameboard::CannonAbility, this),
-	std::bind(&Gameboard::AnchorAbility, this),
-	std::bind(&Gameboard::HookAbility, this),
-	std::bind(&Gameboard::KeyAbility, this),
-	std::bind(&Gameboard::ChestAbility, this),
-	std::bind(&Gameboard::ScrollAbility, this),
-	std::bind(&Gameboard::CrystalBallAbility, this),
-	std::bind(&Gameboard::SabreAbility, this),
-	std::bind(&Gameboard::KrakenAbility, this),
-	std::bind(&Gameboard::MermaidAbility, this)
+	std::bind(&Gameboard::CannonAbility, this, _1),
+	std::bind(&Gameboard::AnchorAbility, this, _1),
+	std::bind(&Gameboard::HookAbility, this, _1),
+	std::bind(&Gameboard::KeyAbility, this, _1),
+	std::bind(&Gameboard::ChestAbility, this, _1),
+	std::bind(&Gameboard::ScrollAbility, this, _1),
+	std::bind(&Gameboard::CrystalBallAbility, this, _1),
+	std::bind(&Gameboard::SabreAbility, this, _1),
+	std::bind(&Gameboard::KrakenAbility, this, _1),
+	std::bind(&Gameboard::MermaidAbility, this, _1)
 };
 
 	CreateCards();
@@ -231,7 +234,21 @@ void Gameboard::ShuffleDiscard(){
 
 Card* Gameboard::ProcessCard(Card* card){
 	assert(card);
-	return Abilities[card->type_]();
+
+	static std::vector<Card::CardType> cards = {
+		Card::Cannon,
+		Card::Sabre,
+		Card::Hook,
+		Card::CrystalBall,
+		Card::Scroll
+	};
+
+	if(std::find(cards.begin(), cards.end(), card->type_) != cards.end())
+		card->highlight_ = true;
+
+	Draw();
+
+	return Abilities[card->type_](card);
 }
 
 //
